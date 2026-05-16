@@ -1,0 +1,196 @@
+@import '@figma/astraui/styles.css';
+
+:root {
+  /* PantryPal Brand Colors */
+  --pp-pantry-green: #3F7D58;
+  --pp-fresh-mint: #A7D7A9;
+  --pp-warm-cream: #FFF7E6;
+  --pp-soft-sage: #DDEBDD;
+  --pp-grocery-brown: #8A6A44;
+  --pp-tomato-red: #D95D39;
+  --pp-lemon-yellow: #F4C95D;
+  --pp-sky-blue: #5DADEC;
+
+  /* Neutral grays */
+  --pp-gray-900: #1F2933;
+  --pp-gray-700: #3E4C59;
+  --pp-gray-500: #7B8794;
+  --pp-gray-300: #CBD2D9;
+  --pp-gray-100: #F5F7FA;
+  --pp-white: #FFFFFF;
+
+  /* Typography (mobile scale per PantryPal design system) */
+  --pp-font: 'Inter', system-ui, -apple-system, sans-serif;
+  --pp-fs-h1: 32px;
+  --pp-fs-h2: 26px;
+  --pp-fs-h3: 22px;
+  --pp-fs-card: 18px;
+  --pp-fs-body: 16px;
+  --pp-fs-button: 16px;
+  --pp-fs-small: 13px;
+  /* legacy aliases kept for in-app classes */
+  --pp-fs-h4: 18px;
+  --pp-fs-h5: 18px;
+  --pp-fs-h6: 16px;
+
+  /* Spacing */
+  --pp-sp-1: 4px;
+  --pp-sp-2: 8px;
+  --pp-sp-3: 12px;
+  --pp-sp-4: 16px;
+  --pp-sp-5: 20px;
+  --pp-sp-6: 24px;
+  --pp-sp-8: 32px;
+
+  /* Radius */
+  --pp-radius-sm: 8px;
+  --pp-radius-md: 12px;
+  --pp-radius-lg: 20px;
+  --pp-radius-full: 9999px;
+
+  /* Borders */
+  --pp-border: 1px solid var(--pp-gray-300);
+  --pp-shadow-card: 0 2px 8px rgba(31, 41, 51, 0.06);
+  --pp-shadow-elev: 0 6px 24px rgba(31, 41, 51, 0.12);
+  --pp-shadow-fab: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --pp-shadow-toggle: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --pp-shadow-phone: 0 30px 80px rgba(31, 41, 51, 0.25);
+
+  /* Tonal soft surfaces (status / category tints) */
+  --pp-red-soft: #FCE3DA;
+  --pp-red-soft-border: #F4B59E;
+  --pp-red-text: var(--pp-tomato-red);
+  --pp-yellow-soft: #FCEFCB;
+  --pp-yellow-text: #8A6A1A;
+  --pp-blue-soft: #DCEEFB;
+  --pp-blue-text: #1F70B5;
+  --pp-brown-soft: #EFE3D4;
+  --pp-brown-text: var(--pp-grocery-brown);
+
+  /* Brand gradient + overlays */
+  --pp-pantry-green-dark: #2C5E42;
+  --pp-gradient-primary: linear-gradient(135deg, var(--pp-pantry-green), var(--pp-pantry-green-dark));
+  --pp-overlay-white-15: rgba(255, 255, 255, 0.15);
+  --pp-overlay-white-18: rgba(255, 255, 255, 0.18);
+  --pp-overlay-white-85: rgba(255, 255, 255, 0.85);
+  --pp-overlay-white-90: rgba(255, 255, 255, 0.90);
+  --pp-image-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.5) 100%);
+  --pp-image-overlay-soft: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%);
+  --pp-scrim: rgba(31, 41, 51, 0.45);
+  --pp-scrim-strong: rgba(0, 0, 0, 0.45);
+
+  /* Chart + expiry palette */
+  --pp-chart-1: #6AAF73;
+  --pp-chart-2: #8FD694;
+  --pp-chart-3: #B8E6A1;
+  --pp-chart-4: #C9EBB5;
+  --pp-chart-5: #E0F4D7;
+  --pp-chart-6: #F5F9E8;
+  --pp-expiry-urgent: #FF9966;
+  --pp-expiry-soon: var(--pp-lemon-yellow);
+  --pp-expiry-ok: #B8D97F;
+}
+
+/* Dark mode overrides */
+:root[data-pp-theme="dark"] {
+  --pp-warm-cream: #1a1d1f;
+  --pp-soft-sage: #1e2a23;
+  --pp-fresh-mint: #2a4d35;
+  --pp-pantry-green: #5BAE7A;
+  --pp-gray-900: #F5F7FA;
+  --pp-gray-700: #CBD2D9;
+  --pp-gray-500: #9AA5B1;
+  --pp-gray-300: #3E4C59;
+  --pp-gray-100: #232629;
+  --pp-white: #2A2D30;
+  --pp-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --pp-shadow-elev: 0 6px 24px rgba(0, 0, 0, 0.45);
+
+  /* Dark tonal surfaces */
+  --pp-red-soft: #3a1f1a;
+  --pp-red-soft-border: #6b3327;
+  --pp-yellow-soft: #3a311a;
+  --pp-yellow-text: #E6C879;
+  --pp-blue-soft: #1a2a3a;
+  --pp-blue-text: #7FB9E6;
+  --pp-brown-soft: #2e2419;
+  --pp-pantry-green-dark: #2a4d35;
+}
+
+/* Larger text accessibility */
+:root[data-pp-text="large"] {
+  --pp-fs-h1: 36px;
+  --pp-fs-h2: 30px;
+  --pp-fs-h3: 25px;
+  --pp-fs-card: 20px;
+  --pp-fs-body: 18px;
+  --pp-fs-button: 18px;
+  --pp-fs-small: 15px;
+  --pp-fs-h4: 20px;
+  --pp-fs-h5: 20px;
+  --pp-fs-h6: 18px;
+}
+
+/* High contrast accessibility */
+:root[data-pp-contrast="high"] {
+  --pp-pantry-green: #1F6B3D;
+  --pp-pantry-green-dark: #174D2D;
+  --pp-grocery-brown: #5F4423;
+  --pp-tomato-red: #B33B1D;
+  --pp-sky-blue: #155C99;
+  --pp-gray-900: #0B1220;
+  --pp-gray-700: #202938;
+  --pp-gray-500: #3D4858;
+  --pp-gray-300: #8A94A6;
+  --pp-gray-100: #EEF2F6;
+  --pp-border: 1px solid var(--pp-gray-500);
+  --pp-shadow-card: 0 0 0 1px rgba(11, 18, 32, 0.12), 0 3px 10px rgba(11, 18, 32, 0.12);
+}
+
+:root[data-pp-theme="dark"][data-pp-contrast="high"] {
+  --pp-pantry-green: #7EE39E;
+  --pp-pantry-green-dark: #4EA86A;
+  --pp-grocery-brown: #F0C879;
+  --pp-tomato-red: #FF8A66;
+  --pp-sky-blue: #8CCEFF;
+  --pp-gray-900: #FFFFFF;
+  --pp-gray-700: #EDF2F7;
+  --pp-gray-500: #D1D8E0;
+  --pp-gray-300: #687584;
+  --pp-gray-100: #171A1F;
+  --pp-white: #111418;
+  --pp-border: 1px solid var(--pp-gray-500);
+  --pp-shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 4px 14px rgba(0, 0, 0, 0.55);
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: var(--pp-font);
+  color: var(--pp-gray-900);
+  background: var(--pp-gray-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography utility classes (used by app) */
+.pp-h1 { font-family: var(--pp-font); font-size: var(--pp-fs-h1); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.pp-h2 { font-family: var(--pp-font); font-size: var(--pp-fs-h2); font-weight: 700; line-height: 1.2; }
+.pp-h3 { font-family: var(--pp-font); font-size: var(--pp-fs-h3); font-weight: 600; line-height: 1.25; }
+.pp-card-title { font-family: var(--pp-font); font-size: var(--pp-fs-card); font-weight: 600; line-height: 1.3; }
+.pp-h4 { font-family: var(--pp-font); font-size: var(--pp-fs-h4); font-weight: 600; line-height: 1.3; }
+.pp-h5 { font-family: var(--pp-font); font-size: var(--pp-fs-h5); font-weight: 600; line-height: 1.3; }
+.pp-h6 { font-family: var(--pp-font); font-size: var(--pp-fs-h6); font-weight: 500; line-height: 1.4; }
+.pp-body { font-family: var(--pp-font); font-size: var(--pp-fs-body); font-weight: 400; line-height: 1.5; }
+.pp-small { font-family: var(--pp-font); font-size: var(--pp-fs-small); font-weight: 400; line-height: 1.4; color: var(--pp-gray-500); }
+.pp-link { font-family: var(--pp-font); font-size: var(--pp-fs-body); font-weight: 500; color: var(--pp-sky-blue); cursor: pointer; }
+.pp-strong { font-family: var(--pp-font); font-size: var(--pp-fs-body); font-weight: 600; }
+.pp-button { font-family: var(--pp-font); font-size: var(--pp-fs-button); font-weight: 500; }
+
+@keyframes pp-spin {
+  to { transform: rotate(360deg); }
+}
+.pp-spin { animation: pp-spin 0.8s linear infinite; }
+
+* { box-sizing: border-box; }
+button { font-family: var(--pp-font); }
+input, select, textarea { font-family: var(--pp-font); }

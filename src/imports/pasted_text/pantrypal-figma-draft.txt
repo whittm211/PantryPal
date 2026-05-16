@@ -1,0 +1,566 @@
+Create a complete mobile app prototype draft in Figma for a project called PantryPal.
+
+PantryPal is a mobile-first grocery tracking and simple meal planning app. The app helps users track food they already have, reduce food waste, create grocery lists, and find simple meal ideas based on pantry items.
+
+Primary platform: Mobile app for iOS and Android
+Secondary platform: Web app later
+
+Create the Figma file as a polished class project draft with organized sections, clear page titles, and mobile app screens that can later be connected into a clickable prototype.
+
+PROJECT GOAL
+
+Build a realistic mobile prototype for PantryPal that shows the main user experience:
+1. User enters the app.
+2. User views the home dashboard.
+3. User adds a food item.
+4. User sees the item in the pantry.
+5. User creates or updates a grocery list.
+6. User views meal ideas based on available food.
+7. User can understand expiring and low-stock food status.
+
+OVERALL FIGMA STRUCTURE
+
+Create these main Figma sections:
+
+1. Project Overview
+2. User Flow Summary
+3. App Sitemap
+4. Design System Draft
+5. Mobile App Screens
+6. Prototype Notes / Clickable Connections
+
+Use clean spacing, organized frames, and readable labels. The mobile screens should be sized for iPhone 390 x 844.
+
+APP STYLE
+
+Use a clean, simple, beginner-friendly grocery app style.
+
+Visual direction:
+- Fresh and organized
+- Soft rounded cards
+- Large readable text
+- Simple icons
+- Clear buttons
+- Mobile-first layout
+- Friendly and practical, not overly fancy
+
+Use the PantryPal design system:
+
+Typography:
+- Primary typeface: Inter
+- Base body size: 16px
+- Use clear hierarchy with large screen titles and medium card titles
+
+Colors:
+- Pantry Green: #3F7D58
+- Fresh Mint: #A7D7A9
+- Warm Cream: #FFF7E6
+- Soft Sage: #DDEBDD
+- Grocery Brown: #8A6A44
+- Tomato Red: #D95D39 for expiration warnings
+- Lemon Yellow: #F4C95D for low-stock alerts
+- Sky Blue: #5DADEC for links or info
+- Gray 900: #1F2933 for main text
+- Gray 700: #3E4C59 for secondary text
+- Gray 300: #CBD2D9 for borders
+- Gray 100: #F5F7FA for light backgrounds
+- White: #FFFFFF for cards and inputs
+
+ACCESSIBILITY NOTES
+
+Make the app readable and accessible:
+- Body text should be at least 16px
+- Buttons should be large and easy to tap
+- Do not use color alone for alerts
+- Expiring food should include warning labels/icons
+- Low-stock items should include labels/icons
+- Navigation should be simple and shallow
+- Use clear labels, not vague icons only
+
+SECTION 1: PROJECT OVERVIEW
+
+Create a frame titled “PantryPal Project Overview.”
+
+Include:
+App Name: PantryPal
+
+Short Description:
+PantryPal is a mobile-first grocery tracking and simple meal planning app that helps users track food they already have, reduce food waste, create grocery lists, and find simple meal ideas based on pantry items.
+
+Target Users:
+- College students on tight budgets
+- Single working adults who get home tired after work
+- Families managing groceries for multiple people
+
+Primary Platform:
+Mobile app for iOS and Android
+
+Secondary Platform:
+Web app
+
+Main User Need:
+Users need a quick way to know what food they already have, what is close to expiring, what they need to buy, and what they can cook without overthinking meal planning.
+
+SECTION 2: USER FLOW SUMMARY
+
+Create a frame titled “PantryPal Core User Flows.”
+
+Show these flows as connected boxes with arrows:
+
+Flow 1: First-Time Entry
+Welcome / Login → Create Account or Continue as Guest → Onboarding → Home Dashboard
+
+Flow 2: Add Food
+Home Dashboard → Add Food → Enter Food Details → Save Item → My Pantry
+
+Flow 3: Use Expiring Food
+Home Dashboard → Expiring Soon Card → Item Detail → Meal Ideas → Mark Item as Used
+
+Flow 4: Build Grocery List
+Home Dashboard → Grocery List → Add Item or Use Low-Stock Suggestions → Check Off Bought Items → Add Bought Items to Pantry
+
+Flow 5: Find a Meal
+Home Dashboard → Meal Ideas → Meal Detail → Add Missing Ingredients to Grocery List or Mark Ingredients as Used
+
+SECTION 3: APP SITEMAP
+
+Create a visual sitemap frame titled “PantryPal Sitemap.”
+
+Entry Point:
+- Welcome / Login
+- Create Account
+- Log In
+- Continue as Guest
+- Onboarding
+
+Main App Navigation:
+- Home
+- Pantry
+- Add
+- Grocery List
+- Meals
+- Settings
+
+Nested screens:
+Home:
+- Expiring Soon Preview
+- Low-Stock Preview
+- Quick Meal Idea
+- Notifications Preview
+
+Pantry:
+- Pantry List
+- Fridge Filter
+- Freezer Filter
+- Item Detail
+- Edit Item
+- Delete Item
+- Mark as Used
+- Empty Pantry State
+
+Add:
+- Add Food Form
+- Save Success State
+- Save Error State
+
+Grocery List:
+- Add Grocery Item
+- Low-Stock Suggestions
+- Shopping List
+- Mark Item as Bought
+- Add Bought Items to Pantry
+- Empty Grocery List State
+
+Meals:
+- Meal Ideas List
+- Meal Detail
+- Available Ingredients
+- Missing Ingredients
+- Add Missing Ingredients to Grocery List
+
+Settings:
+- Account Info
+- Household Type
+- Reminder Settings
+- Accessibility Settings
+- Logout
+
+SECTION 4: DESIGN SYSTEM DRAFT
+
+Create a design system frame titled “PantryPal Design System Draft.”
+
+Include:
+
+Typography:
+- Typeface: Inter
+- H1: 32px Bold
+- H2: 26px Bold
+- H3: 22px SemiBold
+- Card Title: 18px SemiBold
+- Body: 16px Regular
+- Small Text: 13px Regular
+- Button Text: 16px Medium
+
+Color Palette:
+Show swatches with names and hex codes:
+- Pantry Green #3F7D58
+- Fresh Mint #A7D7A9
+- Warm Cream #FFF7E6
+- Soft Sage #DDEBDD
+- Grocery Brown #8A6A44
+- Tomato Red #D95D39
+- Lemon Yellow #F4C95D
+- Sky Blue #5DADEC
+- Gray 900 #1F2933
+- Gray 700 #3E4C59
+- Gray 300 #CBD2D9
+- Gray 100 #F5F7FA
+- White #FFFFFF
+
+UI Components:
+Create simple component examples:
+- Primary button: Add Food
+- Secondary button: View Pantry
+- Text input field
+- Search bar
+- Food item card
+- Alert card
+- Bottom navigation bar
+- Checkbox grocery list item
+- Segmented control: Pantry / Fridge / Freezer
+
+SECTION 5: MOBILE APP SCREENS
+
+Create these mobile screens using iPhone 390 x 844 frames.
+
+Screen 1: Welcome / Login
+
+Purpose:
+This screen introduces PantryPal and gives users options to create an account, log in, or continue as a guest.
+
+Layout:
+- PantryPal logo or simple grocery basket icon placeholder
+- App name: PantryPal
+- Tagline: Smart pantry. Less waste. Better meals.
+- Short paragraph: Track groceries, reduce waste, and find easy meal ideas.
+- Primary button: Create Account
+- Secondary button: Log In
+- Text link: Continue as Guest
+- Simple friendly background using Warm Cream
+
+Clickable prototype connections:
+- Create Account → Onboarding
+- Log In → Home Dashboard
+- Continue as Guest → Home Dashboard
+
+Screen 2: Onboarding / Setup
+
+Purpose:
+This screen lets users set basic preferences before entering the app.
+
+Layout:
+- Header: Set up your pantry
+- Step indicator: Step 1 of 2
+- Section: Household Type
+- Three selectable cards:
+  - Student
+  - Single Adult
+  - Family
+- Section: Reminders
+- Toggle: Expiration reminders
+- Toggle: Low-stock reminders
+- Button: Continue
+- Text link: Skip for now
+
+Clickable prototype connections:
+- Continue → Home Dashboard
+- Skip for now → Home Dashboard
+
+Screen 3: Home Dashboard
+
+Purpose:
+This screen gives users a quick overview of expiring food, low-stock items, and simple meal ideas.
+
+Layout:
+- Top bar with title PantryPal and profile icon
+- Search bar: Search foods or meals
+- Greeting: Good afternoon, what needs attention?
+- Section: Expiring Soon
+  - Horizontal cards: Milk, Chicken, Yogurt
+  - Each card includes item name and time left
+  - Use warning label such as “2 days left”
+- Section: Low Stock
+  - Cards: Eggs, Bread, Rice
+  - Include label “Low stock”
+- Section: Quick Meal Idea
+  - Card: Egg Fried Rice
+  - Details: 20 min, easy, uses 3 ingredients
+  - Button: View Meal
+- Bottom navigation:
+  - Home
+  - Pantry
+  - Add
+  - List
+  - Meals
+
+Clickable prototype connections:
+- Add tab → Add Food
+- Pantry tab → My Pantry
+- List tab → Grocery List
+- Meals tab → Meal Ideas
+- Expiring item card → Item Detail
+- Quick Meal card → Meal Detail
+
+Screen 4: My Pantry
+
+Purpose:
+This screen shows the food items the user already has and lets them organize items by pantry, fridge, or freezer.
+
+Layout:
+- Top bar: My Pantry
+- Search bar: Search pantry
+- Segmented filter: All / Pantry / Fridge / Freezer
+- Sort/filter icon
+- Food item list cards:
+  - Milk — Fridge — 1 gallon — Exp. in 2 days
+  - Eggs — Fridge — 6 count — Low stock
+  - Chicken — Freezer — 1.2 lbs — Exp. in 4 days
+  - Rice — Pantry — 2 lbs — Good
+  - Pasta — Pantry — 1 box — Good
+- Floating or bottom button: Add Food
+- Bottom navigation
+
+Clickable prototype connections:
+- Item card → Item Detail
+- Add Food button → Add Food
+- Bottom tabs connect to other main screens
+
+Screen 5: Add Food
+
+Purpose:
+This screen lets users enter a new food item with its quantity, storage location, expiration date, and category.
+
+Layout:
+- Top bar with back arrow and title Add Food
+- Input: Food Name
+- Quantity row:
+  - Minus button
+  - Number value
+  - Plus button
+  - Unit dropdown
+- Segmented control: Pantry / Fridge / Freezer
+- Date picker field: Expiration Date
+- Dropdown: Category
+- Optional notes field
+- Secondary button: Cancel
+- Primary button: Save Item
+- Bottom navigation
+
+Clickable prototype connections:
+- Save Item → Save Success State
+- Cancel → Home Dashboard
+- Back arrow → Previous screen
+
+Screen 6: Save Success State
+
+Purpose:
+This confirms that a food item was added successfully.
+
+Layout:
+- Success icon/checkmark
+- Header: Item added
+- Text: Your food item has been saved to My Pantry.
+- Button: View Pantry
+- Secondary button: Add Another Item
+
+Clickable prototype connections:
+- View Pantry → My Pantry
+- Add Another Item → Add Food
+
+Screen 7: Item Detail
+
+Purpose:
+This screen lets users review, edit, delete, or mark an item as used.
+
+Layout:
+- Top bar with back arrow and title Item Detail
+- Large item name: Milk
+- Storage location: Fridge
+- Quantity: 1 gallon
+- Expiration: 2 days left
+- Category: Dairy
+- Status card: Expiring Soon
+- Button: Mark as Used
+- Button: Edit Item
+- Text button: Delete Item
+- Related action card: Find meals using this item
+
+Clickable prototype connections:
+- Mark as Used → My Pantry
+- Edit Item → Edit Item
+- Delete Item → Delete Confirmation
+- Find meals using this item → Meal Ideas
+
+Screen 8: Edit Item
+
+Purpose:
+This screen allows users to fix mistakes or update an existing food item.
+
+Layout:
+- Same layout as Add Food, but fields are pre-filled
+- Title: Edit Item
+- Primary button: Save Changes
+- Secondary button: Cancel
+
+Clickable prototype connections:
+- Save Changes → Item Detail
+- Cancel → Item Detail
+
+Screen 9: Grocery List
+
+Purpose:
+This screen helps users add shopping items, view low-stock suggestions, check off groceries, and move bought items into the pantry.
+
+Layout:
+- Top bar: Grocery List
+- Add item input with Add button
+- Section: Low-Stock Suggestions
+  - Milk with Add button
+  - Bread with Add button
+  - Eggs with Add button
+- Section: Shopping List
+  - Checkbox item: Eggs
+  - Checkbox item: Chicken
+  - Checkbox item: Apples
+  - Checkbox item: Rice
+- Button: Add bought items to Pantry
+- Bottom navigation
+
+Clickable prototype connections:
+- Add bought items to Pantry → Add Bought Items Success
+- Checkbox can show checked state if possible
+- Bottom tabs connect to other main screens
+
+Screen 10: Add Bought Items Success
+
+Purpose:
+This confirms that bought grocery items were moved into the pantry.
+
+Layout:
+- Success checkmark
+- Header: Pantry updated
+- Text: Bought items were added to My Pantry.
+- Button: View Pantry
+- Button: Back to Grocery List
+
+Clickable prototype connections:
+- View Pantry → My Pantry
+- Back to Grocery List → Grocery List
+
+Screen 11: Meal Ideas
+
+Purpose:
+This screen shows simple meal suggestions based on the food the user already has at home.
+
+Layout:
+- Top bar: Meal Ideas
+- Search bar: Search meals or ingredients
+- Filter chips: Quick, Family, Low-cost, Uses expiring food
+- Meal cards:
+  - Chicken Stir Fry — 20 min — Easy — Uses chicken, rice, vegetables
+  - Egg Fried Rice — 20 min — Easy — Uses eggs, rice
+  - Pasta Primavera — 25 min — Easy — Uses pasta, vegetables
+- Each card has:
+  - Placeholder image box
+  - Meal title
+  - Time
+  - Ingredients used
+  - Button: View Meal
+- Bottom navigation
+
+Clickable prototype connections:
+- View Meal → Meal Detail
+- Bottom tabs connect to other main screens
+
+Screen 12: Meal Detail
+
+Purpose:
+This screen shows details for one meal and lets users add missing ingredients or mark ingredients as used.
+
+Layout:
+- Top bar with back arrow and title Meal Detail
+- Meal name: Egg Fried Rice
+- Time: 20 minutes
+- Difficulty: Easy
+- Section: Available Ingredients
+  - Eggs
+  - Rice
+- Section: Missing Ingredients
+  - Soy sauce
+  - Green onion
+- Button: Add Missing Ingredients to Grocery List
+- Button: Mark Ingredients as Used
+- Simple instruction placeholder:
+  1. Cook rice
+  2. Scramble eggs
+  3. Mix together
+- Bottom navigation
+
+Clickable prototype connections:
+- Add Missing Ingredients → Grocery List
+- Mark Ingredients as Used → My Pantry
+- Back arrow → Meal Ideas
+
+Screen 13: Empty Pantry State
+
+Purpose:
+This screen appears when the user has not added any food yet.
+
+Layout:
+- Header: Your pantry is empty
+- Simple empty box illustration placeholder
+- Text: Add your first food item to start tracking groceries.
+- Button: Add Food
+- Bottom navigation
+
+Clickable prototype connections:
+- Add Food → Add Food
+
+Screen 14: Error State
+
+Purpose:
+This screen shows what happens if the app cannot save an item.
+
+Layout:
+- Alert card
+- Header: Couldn’t save item
+- Text: Check the food name and try again.
+- Button: Try Again
+- Text button: Cancel
+
+Clickable prototype connections:
+- Try Again → Add Food
+- Cancel → Home Dashboard
+
+SECTION 6: PROTOTYPE NOTES / CLICKABLE CONNECTIONS
+
+Create a frame titled “Prototype Connection Notes.”
+
+Include:
+- Welcome/Create Account connects to Onboarding.
+- Welcome/Log In and Continue as Guest connect to Home Dashboard.
+- Bottom navigation connects Home, Pantry, Add, List, and Meals.
+- Save Item connects to Save Success State.
+- View Pantry connects to My Pantry.
+- Food item cards connect to Item Detail.
+- Edit Item connects to Edit Item screen.
+- Grocery List check-off flow connects to Add Bought Items Success.
+- Meal cards connect to Meal Detail.
+- Add Missing Ingredients connects to Grocery List.
+- Mark Ingredients as Used connects to My Pantry.
+- Empty Pantry Add Food button connects to Add Food.
+- Error Try Again button connects back to Add Food.
+
+FINAL REQUIREMENTS
+
+Make this look like a full Figma project draft, not just individual screens. Include section titles, annotations, and clear labels. The prototype should be understandable for a class critique and should show the core PantryPal experience from entry to pantry tracking, grocery list management, and meal ideas.
