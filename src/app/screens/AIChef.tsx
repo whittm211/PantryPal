@@ -55,7 +55,7 @@ export function AIChef({
           pantry, meals, prefs: dietPrefs, history, mode, servings, promptContext,
         });
       } catch (err) {
-        console.warn('[AIChef] falling back to local heuristic', err);
+        console.info('[AIChef] using local heuristic fallback', err);
         res = await generateMealRecommendations({
           pantry, meals, prefs: dietPrefs, history, mode, servings, promptContext,
         });
