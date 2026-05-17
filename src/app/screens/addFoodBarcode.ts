@@ -7,10 +7,11 @@ export type AddFoodBarcodeDraft = {
   emoji?: string;
   days?: string;
   photo?: string;
+  notes?: string;
 };
 
 export function barcodeLookupToDraft(result: BarcodeLookup): AddFoodBarcodeDraft {
-  if (!result.found) return {};
+  if (!result.found) return { notes: `Scanned barcode: ${result.barcode}` };
 
   return {
     ...(result.name ? { name: result.name } : {}),

@@ -24,7 +24,9 @@ describe('barcodeLookupToDraft', () => {
     });
   });
 
-  it('returns an empty draft for missing barcode results', () => {
-    expect(barcodeLookupToDraft({ found: false, barcode: '000000' })).toEqual({});
+  it('preserves the scanned barcode in notes when lookup misses', () => {
+    expect(barcodeLookupToDraft({ found: false, barcode: '000000' })).toEqual({
+      notes: 'Scanned barcode: 000000',
+    });
   });
 });

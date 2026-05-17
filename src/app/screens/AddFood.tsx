@@ -93,6 +93,7 @@ export function AddFood({
     if (draft.brand) setBrand(draft.brand);
     if (draft.emoji) setEmoji(draft.emoji);
     if (draft.photo) setPhoto(draft.photo);
+    if (draft.notes) setNotes((current) => current.trim() ? current : draft.notes!);
   }
 
   function quickAddFromHistory(item: PurchaseHistory) {
