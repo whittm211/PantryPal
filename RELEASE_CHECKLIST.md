@@ -22,6 +22,7 @@ Last updated: 2026-05-17
 - [x] App Store listing, privacy, screenshot, and subscription prep worksheet exists in [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md).
 - [x] App Store screenshot shot list and capture sizes are documented in [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md).
 - [x] Public privacy page is available at `/privacy.html` for App Store review.
+- [x] Public support page is available at `/support.html` for App Store review.
 
 ## Verification Commands
 
@@ -53,6 +54,7 @@ Check:
 - [ ] AI Chef recipe navigation opens recipe detail.
 - [ ] Settings shows sync status, preferences, export/import, and Privacy & support.
 - [ ] Public privacy page opens at `https://whittm211.github.io/PantryPal/privacy.html`.
+- [ ] Public support page opens at `https://whittm211.github.io/PantryPal/support.html`.
 
 ## Post-Launch Roadmap
 

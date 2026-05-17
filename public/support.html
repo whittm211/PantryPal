@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PantryPal Support</title>
+    <style>
+      :root {
+        color: #1d2b22;
+        background: #fbfaf5;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 20px 64px;
+        line-height: 1.6;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #1f5c3a;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: 2.25rem;
+        margin-bottom: 0.25rem;
+      }
+
+      h2 {
+        margin-top: 2rem;
+      }
+
+      a {
+        color: #0f6a8f;
+      }
+
+      .muted {
+        color: #5f6f64;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>PantryPal Support</h1>
+      <p class="muted">Help for PantryPal pantry tracking, grocery lists, meal planning, and AI Chef suggestions.</p>
+
+      <h2>Getting Help</h2>
+      <p>
+        For launch support, use the
+        <a href="https://github.com/whittm211/PantryPal/issues">GitHub repository issue tracker</a>
+        or contact the PantryPal project owner.
+      </p>
+      <p>When reporting a problem, include:</p>
+      <ul>
+        <li>What screen you were on.</li>
+        <li>Whether you were using guest mode or a signed-in account.</li>
+        <li>What you expected to happen.</li>
+        <li>What actually happened.</li>
+        <li>Any visible error message.</li>
+        <li>Your browser and device, if known.</li>
+      </ul>
+
+      <h2>Privacy</h2>
+      <p>
+        Read the PantryPal privacy policy at
+        <a href="./privacy.html">privacy.html</a>.
+      </p>
+
+      <h2>Data Export</h2>
+      <p>
+        Guest mode stores data on the current device. To move or back up guest data, open Settings &gt; Data &gt;
+        Export JSON, then import that backup on another device.
+      </p>
+
+      <h2>Account And Sign-In Help</h2>
+      <p>
+        If email confirmation is enabled, confirm your email before signing in. If you requested too many confirmation
+        emails, wait a few minutes before trying again.
+      </p>
+
+      <h2>Common Issues</h2>
+
+      <h3>I do not see my guest data on another device</h3>
+      <p>
+        Guest data is stored in the browser on the current device and does not sync until you use a signed-in account.
+      </p>
+
+      <h3>AI Chef keeps generating</h3>
+      <p>
+        AI Chef first tries the PantryPal backend. If the remote request times out, the app falls back to local
+        pantry-aware suggestions so you can still get meal ideas.
+      </p>
+
+      <h3>Barcode lookup does not find my item</h3>
+      <p>
+        Barcode lookup depends on available product data. If an item is not found, enter the food details manually.
+      </p>
+
+      <h2>Known Limitations</h2>
+      <ul>
+        <li>Barcode coverage is incomplete.</li>
+        <li>Receipt scanning is not available yet.</li>
+        <li>Nutrition values are estimates when shown.</li>
+        <li>AI Chef suggestions should be reviewed for allergies and dietary needs.</li>
+        <li>Guest data can be lost if browser storage is cleared.</li>
+      </ul>
+
+      <h2>Security Notes</h2>
+      <p>Do not share private Supabase keys, access tokens, or local environment files in support requests.</p>
+    </main>
+  </body>
+</html>

@@ -27,6 +27,7 @@ describe('production smoke helpers', () => {
     expect(checks).toEqual([
       { label: 'app shell', url: 'https://whittm211.github.io/PantryPal/' },
       { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
+      { label: 'support page', url: 'https://whittm211.github.io/PantryPal/support.html' },
       { label: 'asset 1', url: 'https://whittm211.github.io/PantryPal/assets/index.js' },
     ]);
   });
@@ -34,6 +35,7 @@ describe('production smoke helpers', () => {
   it('builds static page checks for App Store required public pages', () => {
     expect(buildStaticPageChecks('https://whittm211.github.io/PantryPal/')).toEqual([
       { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
+      { label: 'support page', url: 'https://whittm211.github.io/PantryPal/support.html' },
     ]);
   });
 });
