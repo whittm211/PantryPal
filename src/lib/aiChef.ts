@@ -1,11 +1,13 @@
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { supabase } from './supabase';
+import { isSupabaseConfigured, supabase } from './supabase';
 import type { AIRequest, AISuggestion } from '../app/ai';
 import { pickNovelImage } from '../app/ai';
 
 const FN_URL = `https://${projectId}.supabase.co/functions/v1/make-server-e808db2a/ai-chef`;
 
 export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion[]> {
+  if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
+
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData.session?.access_token ?? publicAnonKey;
 

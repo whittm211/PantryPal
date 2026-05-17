@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from './supabase';
+import { isSupabaseConfigured, supabase } from './supabase';
 import { buildAuthProfileMetadata } from './authProfile';
 
 type AuthMode = 'authenticated' | 'guest' | 'unauthenticated';
@@ -28,6 +28,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
@@ -46,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const mode: AuthMode = user ? 'authenticated' : isGuest ? 'guest' : 'unauthenticated';
 
   async function signUp(email: string, password: string, displayName?: string) {
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -55,11 +61,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signIn(email: string, password: string) {
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }
 
   async function updateProfileName(displayName: string) {
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
     const { data, error } = await supabase.auth.updateUser({
       data: buildAuthProfileMetadata(displayName),
     });
@@ -70,12 +78,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
-    await supabase.auth.signOut();
+    if (isSupabaseConfigured) await supabase.auth.signOut();
     localStorage.removeItem(GUEST_KEY);
     setIsGuest(false);
   }
 
   async function resetPassword(email: string) {
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin,
     });

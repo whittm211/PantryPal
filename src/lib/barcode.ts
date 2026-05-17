@@ -1,5 +1,5 @@
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { supabase } from './supabase';
+import { isSupabaseConfigured, supabase } from './supabase';
 
 export type BarcodeLookup = {
   found: boolean;
@@ -13,6 +13,8 @@ export type BarcodeLookup = {
 };
 
 export async function lookupBarcode(code: string): Promise<BarcodeLookup> {
+  if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
+
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData.session?.access_token ?? publicAnonKey;
   const res = await fetch(
