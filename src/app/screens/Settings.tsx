@@ -51,6 +51,7 @@ import {
   formatLastSynced,
   summarizeCloudSync,
 } from '../cloudSyncStatus';
+import { launchInfoItems } from '../launchInfo';
 
 const dietOptions: DietTag[] = ['vegetarian', 'vegan', 'gluten-free', 'low-carb', 'high-protein', 'dairy-free'];
 const AVATAR_COLORS = [
@@ -1060,6 +1061,18 @@ export function Settings({
             }}>
               <Upload size={16} /> Choose File to Import
             </label>
+          </Card>
+
+          <Card style={{ padding: '14px 16px' }}>
+            <div className="pp-strong" style={{ marginBottom: 8 }}>Privacy & support</div>
+            <div style={{ display: 'grid', gap: 10 }}>
+              {launchInfoItems.map((item) => (
+                <div key={item.title}>
+                  <div className="pp-strong" style={{ fontSize: 13 }}>{item.title}</div>
+                  <div className="pp-small">{item.detail}</div>
+                </div>
+              ))}
+            </div>
           </Card>
         </div>
       </div>
