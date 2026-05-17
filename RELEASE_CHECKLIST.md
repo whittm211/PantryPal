@@ -58,3 +58,7 @@ Check:
 - Add a dedicated support/contact page or support email.
 - Add admin cleanup tools for test accounts and test data.
 - Consider packaged mobile distribution if PantryPal needs app store presence.
+
+## Admin Cleanup
+
+After public QA, use [ADMIN_CLEANUP.md](./ADMIN_CLEANUP.md) to remove disposable QA users and test data from Supabase.

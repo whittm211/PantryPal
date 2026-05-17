@@ -103,6 +103,7 @@ Before deploying a web MVP:
 
 For launch-specific status, see [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
 For support and privacy details, see [SUPPORT.md](./SUPPORT.md) and [PRIVACY.md](./PRIVACY.md).
+For post-QA data cleanup, see [ADMIN_CLEANUP.md](./ADMIN_CLEANUP.md).
 
 ## Deploy As A Web App
 
