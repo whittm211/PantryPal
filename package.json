@@ -9,9 +9,15 @@
     "smoke:prod": "node scripts/smokeProduction.mjs",
     "smoke:supabase": "node scripts/smokeSupabase.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "mobile:sync": "npm run build && cap sync",
+    "mobile:android": "npm run build && cap open android",
+    "mobile:ios": "npm run build && cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/ios": "^8.3.4",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@figma/astraui": "1.0.0",
@@ -44,6 +50,7 @@
     "vaul": "1.1.2"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.3.4",
     "@tailwindcss/vite": "4.1.12",
     "@types/node": "^25.8.0",
     "@types/react": "^18.3.27",

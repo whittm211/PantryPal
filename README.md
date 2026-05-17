@@ -157,16 +157,17 @@ For a local deploy with the Supabase CLI:
 supabase functions deploy make-server-e808db2a --project-ref lpmgqgyyzmdpujuwovrp --use-api
 ```
 
-## Mobile Packaging Later
+## Mobile Packaging
 
-After the web MVP is stable, package the existing React app with Capacitor:
+The app is configured with Capacitor for Android and iOS.
 
 ```powershell
-npm install @capacitor/core @capacitor/cli
-npx cap init PantryPal com.whittm211.pantrypal
 npm run build
-npx cap add android
 npx cap sync
+npx cap open android
+npx cap open ios
 ```
 
-iOS packaging requires macOS and Xcode.
+Android builds require Android Studio. iOS builds require macOS and Xcode.
+
+For the mobile release process and payment rules, see [MOBILE_RELEASE.md](./MOBILE_RELEASE.md).
