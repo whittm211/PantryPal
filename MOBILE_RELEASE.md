@@ -36,6 +36,8 @@ npm run mobile:ios
 7. Generate a signed Android App Bundle (`.aab`) for Play Store upload.
 8. Use Google Play internal testing before production release.
 
+Use [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md) for the Google Play listing, Data safety, internal testing, and subscription setup worksheet.
+
 GitHub Actions runs `Mobile Android Build` on pushes and pull requests. It builds the web assets, syncs Capacitor Android, and runs a debug APK build with Gradle.
 
 Successful runs upload a `PantryPal-debug-apk` artifact. Download it from the workflow run summary to install a debug build on an Android test device.

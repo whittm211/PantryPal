@@ -25,6 +25,7 @@ Last updated: 2026-05-17
 - [x] Public support page is available at `/support.html` for App Store review.
 - [x] Public terms page is available at `/terms.html` for subscriptions and App Store review.
 - [x] Public marketing page is available at `/marketing.html` for App Store Connect.
+- [x] Google Play listing, Data safety, internal testing, and subscription prep worksheet exists in [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md).
 
 ## Verification Commands
 
@@ -70,6 +71,7 @@ Check:
 - Consider packaged mobile distribution if PantryPal needs app store presence.
 - Complete the Apple Developer membership activation, then follow [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md) for TestFlight.
 - Capture the App Store screenshot set from [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md).
+- Create the Google Play Console app, then follow [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md) for Android internal testing.
 
 ## Admin Cleanup
 
