@@ -101,6 +101,9 @@ Before deploying a web MVP:
 - Confirm import/export works from Settings.
 - Confirm no real credentials are committed.
 
+For launch-specific status, see [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
+For support and privacy details, see [SUPPORT.md](./SUPPORT.md) and [PRIVACY.md](./PRIVACY.md).
+
 ## Deploy As A Web App
 
 The repo includes `vercel.json` and `netlify.toml` so either host can deploy the app directly from GitHub.
