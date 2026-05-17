@@ -34,7 +34,7 @@ Screenshots should show real PantryPal screens, not generic mockups.
 - Grocery list.
 - Plans screen showing PantryPal Plus as coming soon or enabled, depending on payment status.
 
-Prepare iPhone screenshots for the required App Store Connect device sizes. Reuse the same content across sizes only after checking that text is readable and not cropped.
+Prepare iPhone screenshots for the required App Store Connect device sizes. Reuse the same content across sizes only after checking that text is readable and not cropped. Use [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md) for the capture sizes, shot list, naming, and quality bar.
 
 ## Privacy Answers
 
