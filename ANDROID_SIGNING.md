@@ -73,6 +73,8 @@ Add:
 
 Do not paste the raw `.jks` file into chat or commit it to git.
 
+The base64 file is written as plain ASCII text so it can be copied into GitHub Secrets without hidden encoding bytes.
+
 Before adding secrets, verify the generated files:
 
 ```powershell

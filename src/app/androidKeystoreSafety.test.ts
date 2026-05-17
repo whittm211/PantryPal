@@ -27,6 +27,8 @@ describe('android keystore safety', () => {
     expect(script).toContain('keytool');
     expect(script).toContain('upload-keystore.base64.txt');
     expect(script).toContain('SecureStringToBSTR');
+    expect(script).toContain('[System.Text.Encoding]::ASCII');
+    expect(script).toContain('WriteAllText');
     expect(script).not.toContain('-AsPlainText');
   });
 });

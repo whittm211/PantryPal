@@ -56,7 +56,8 @@ keytool `
   -dname "CN=PantryPal, OU=Mobile, O=PantryPal, L=Local, ST=NA, C=US"
 
 $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $keystorePath))
-[Convert]::ToBase64String($bytes) | Set-Content -Path $base64Path -NoNewline
+$base64 = [Convert]::ToBase64String($bytes)
+[System.IO.File]::WriteAllText((Join-Path (Resolve-Path $OutputDir) "upload-keystore.base64.txt"), $base64, [System.Text.Encoding]::ASCII)
 
 Write-Host ""
 Write-Host "Android upload keystore generated locally."
