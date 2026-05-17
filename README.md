@@ -88,13 +88,17 @@ Before deploying a web MVP:
 
 ## Deploy As A Web App
 
-Any static host that supports Vite apps should work. For Vercel or Netlify:
+The repo includes `vercel.json` and `netlify.toml` so either host can deploy the app directly from GitHub.
+
+For Vercel or Netlify:
 
 - Build command: `npm run build`
 - Publish directory: `dist`
 - Environment variables:
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_ANON_KEY`
+
+Both configs include a single-page-app fallback so deep links serve `index.html`.
 
 ## Mobile Packaging Later
 
