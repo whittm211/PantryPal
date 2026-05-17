@@ -70,6 +70,12 @@ Run the public app smoke check:
 npm run smoke:prod
 ```
 
+Run the Supabase function smoke check:
+
+```powershell
+npm run smoke:supabase
+```
+
 Build production assets:
 
 ```powershell
@@ -88,6 +94,7 @@ Before deploying a web MVP:
 - Run `npm run typecheck`.
 - Run `npm run build`.
 - Run `npm run smoke:prod` after the public deploy finishes.
+- Run `npm run smoke:supabase` after Supabase functions deploy.
 - Test the guest flow in the browser.
 - Test account creation and login if Supabase auth is enabled.
 - Confirm Supabase Edge Functions are deployed if backend code changed.
@@ -134,6 +141,7 @@ Add these repository secrets before using it:
 
 - `SUPABASE_ACCESS_TOKEN`: a Supabase personal access token.
 - `SUPABASE_PROJECT_ID`: the Supabase project ref, for example `lpmgqgyyzmdpujuwovrp`.
+- `VITE_SUPABASE_ANON_KEY`: reused by the workflow to smoke-test the protected function health route.
 
 The access token should come from Supabase account settings and starts with `sbp_`. Do not use the anon key or service role key for `SUPABASE_ACCESS_TOKEN`.
 

@@ -7,6 +7,7 @@
     "build": "vite build",
     "dev": "vite",
     "smoke:prod": "node scripts/smokeProduction.mjs",
+    "smoke:supabase": "node scripts/smokeSupabase.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

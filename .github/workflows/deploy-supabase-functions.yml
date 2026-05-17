@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
 
     steps:
@@ -42,5 +43,13 @@ jobs:
             exit 1
           fi
 
+          if [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::VITE_SUPABASE_ANON_KEY repository secret is missing or empty."
+            exit 1
+          fi
+
       - name: Deploy Edge Functions
         run: supabase functions deploy make-server-e808db2a --project-ref "$SUPABASE_PROJECT_ID" --use-api
+
+      - name: Check deployed function health
+        run: npm run smoke:supabase
