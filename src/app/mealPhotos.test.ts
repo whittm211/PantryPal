@@ -58,4 +58,18 @@ describe('getMealPhoto', () => {
       expect.objectContaining({ alt: 'Ratatouille', source: 'TheMealDB', match: 'exact' }),
     ]);
   });
+
+  it('approves close recipe database photos only for tight dish-name matches', () => {
+    const closeMeals: Meal[] = [
+      { ...baseMeal, id: 'cm-italian-margherita-pizza', name: 'Margherita Pizza' },
+      { ...baseMeal, id: 'cm-japanese-chicken-katsu-curry', name: 'Chicken Katsu Curry' },
+      { ...baseMeal, id: 'cm-chinese-sweet-sour-pork', name: 'Sweet & Sour Pork' },
+    ];
+
+    expect(closeMeals.map((meal) => getMealPhoto(meal))).toEqual([
+      expect.objectContaining({ alt: 'Margherita Pizza', source: 'TheMealDB', match: 'close' }),
+      expect.objectContaining({ alt: 'Chicken Katsu Curry', source: 'TheMealDB', match: 'close' }),
+      expect.objectContaining({ alt: 'Sweet & Sour Pork', source: 'TheMealDB', match: 'exact' }),
+    ]);
+  });
 });
