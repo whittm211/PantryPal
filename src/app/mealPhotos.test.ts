@@ -45,6 +45,15 @@ describe('getMealPhoto', () => {
     );
   });
 
+  it('approves a photo for every built-in meal in the 50-meal catalog', () => {
+    const builtInMeals = [...meals, ...curatedMeals];
+    const missingPhotos = builtInMeals
+      .filter((meal) => !getMealPhoto(meal))
+      .map((meal) => `${meal.id}: ${meal.name}`);
+
+    expect(missingPhotos).toEqual([]);
+  });
+
   it('approves exact recipe database photos for generated cookbook matches', () => {
     const matchedMeals: Meal[] = [
       { ...baseMeal, id: 'cm-thai-pad-thai', name: 'Pad Thai' },
