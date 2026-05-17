@@ -525,10 +525,11 @@ CATEGORIES.forEach((cat) => {
   });
 });
 
-// Pad to exactly 350 if short
-while (curatedMeals.length < 350) {
+const GENERATED_MEAL_LIMIT = 34;
+
+// Pad if short so the built-in app catalog stays at 50 meals with the 16 base recipes.
+while (curatedMeals.length < GENERATED_MEAL_LIMIT) {
   const base = curatedMeals[curatedMeals.length % CATEGORIES[0].recipes.length];
   curatedMeals.push({ ...base, id: `${base.id}-x${curatedMeals.length}`, name: `${base.name} (variation)` });
 }
-// Trim to 350
-curatedMeals.length = 350;
+curatedMeals.length = GENERATED_MEAL_LIMIT;
