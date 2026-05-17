@@ -237,7 +237,7 @@ const MEMBER_COLORS = [
   'var(--pp-lemon-yellow)',
   'var(--pp-fresh-mint)',
 ];
-const MEMBER_EMOJIS = ['ðŸ‘¤', 'ðŸ§‘', 'ðŸ‘©', 'ðŸ‘¨', 'ðŸ§’', 'ðŸ‘¶'];
+const MEMBER_EMOJIS = ['👤', '🧑', '👩', '👨', '🧒', '👶'];
 
 export function mapHouseholdMembers(rows: HouseholdMemberRow[]): HouseholdMember[] {
   return rows.map((row, index) => ({
