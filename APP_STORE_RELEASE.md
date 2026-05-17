@@ -21,6 +21,7 @@ Use this worksheet while the Apple Developer Program status is **Membership pend
 - Keywords: pantry, groceries, meal planner, recipes, food tracker, fridge, leftovers, shopping list
 - Support URL: `https://whittm211.github.io/PantryPal/support.html`
 - Privacy Policy URL: `https://whittm211.github.io/PantryPal/privacy.html`
+- Terms URL: `https://whittm211.github.io/PantryPal/terms.html`
 - Marketing URL: leave blank until a dedicated landing page exists.
 
 ## Screenshot Plan
@@ -74,6 +75,7 @@ Do not send iOS users to Stripe for premium digital features. Use Apple In-App P
 - [ ] Prepare app listing text.
 - [x] Prepare Support URL.
 - [x] Confirm Privacy Policy URL is publicly reachable.
+- [x] Prepare Terms URL.
 - [ ] Capture screenshot set from the live or local app.
 - [ ] Draft subscription group and product names.
 - [ ] Keep Apple signing files out of git.

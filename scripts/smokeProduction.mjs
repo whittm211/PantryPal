@@ -36,6 +36,7 @@ export function buildStaticPageChecks(baseUrl) {
   return [
     { label: 'privacy policy', url: new URL('privacy.html', baseUrl).href },
     { label: 'support page', url: new URL('support.html', baseUrl).href },
+    { label: 'terms page', url: new URL('terms.html', baseUrl).href },
   ];
 }
 

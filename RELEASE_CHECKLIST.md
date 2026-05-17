@@ -23,6 +23,7 @@ Last updated: 2026-05-17
 - [x] App Store screenshot shot list and capture sizes are documented in [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md).
 - [x] Public privacy page is available at `/privacy.html` for App Store review.
 - [x] Public support page is available at `/support.html` for App Store review.
+- [x] Public terms page is available at `/terms.html` for subscriptions and App Store review.
 
 ## Verification Commands
 
@@ -55,6 +56,7 @@ Check:
 - [ ] Settings shows sync status, preferences, export/import, and Privacy & support.
 - [ ] Public privacy page opens at `https://whittm211.github.io/PantryPal/privacy.html`.
 - [ ] Public support page opens at `https://whittm211.github.io/PantryPal/support.html`.
+- [ ] Public terms page opens at `https://whittm211.github.io/PantryPal/terms.html`.
 
 ## Post-Launch Roadmap
 
