@@ -71,11 +71,12 @@ Use Google Play internal testing before production.
 
 1. Create the Google Play Console app.
 2. Complete app content, Data safety, store listing, and pricing/distribution setup.
-3. Run the `Mobile Android Release Bundle` workflow after Android signing secrets are configured.
-4. Upload the signed `.aab` artifact to an internal testing release.
-5. Add internal testers.
-6. Test sign-up, guest mode, pantry, grocery list, AI Chef, barcode camera permission, and Plans.
-7. Verify install, update, and uninstall behavior on a real Android device.
+3. Follow [ANDROID_SIGNING.md](./ANDROID_SIGNING.md) to create the upload keystore and add GitHub signing secrets.
+4. Run the `Mobile Android Release Bundle` workflow after Android signing secrets are configured.
+5. Upload the signed `.aab` artifact to an internal testing release.
+6. Add internal testers.
+7. Test sign-up, guest mode, pantry, grocery list, AI Chef, barcode camera permission, and Plans.
+8. Verify install, update, and uninstall behavior on a real Android device.
 
 Internal testing is the fastest Play Console testing lane and is the right first Android distribution step.
 
@@ -104,7 +105,7 @@ Before enabling paid Android subscriptions:
 - [ ] Upload icon, feature graphic, and screenshots.
 - [ ] Complete Data safety form.
 - [ ] Complete app content declarations.
-- [ ] Configure Android signing secrets in GitHub.
+- [ ] Configure Android signing secrets in GitHub using [ANDROID_SIGNING.md](./ANDROID_SIGNING.md).
 - [ ] Run `Mobile Android Release Bundle`.
 - [ ] Upload `.aab` to internal testing.
 - [ ] Test Android install and core app flows.

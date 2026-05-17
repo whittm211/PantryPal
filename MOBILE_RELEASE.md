@@ -57,6 +57,8 @@ On Windows, use `scripts/generate-android-keystore.ps1`:
 .\scripts\generate-android-keystore.ps1
 ```
 
+Use [ANDROID_SIGNING.md](./ANDROID_SIGNING.md) for the full Android upload keystore, backup, GitHub secrets, and signed `.aab` workflow checklist.
+
 It writes local-only files under `.android-release/`:
 
 - `upload-keystore.jks`: keep this private and backed up.
