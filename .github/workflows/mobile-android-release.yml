@@ -31,8 +31,34 @@ jobs:
 
       - name: Decode Android upload keystore
         run: |
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode > android/app/upload-keystore.jks
-          test -s android/app/upload-keystore.jks
+          python - <<'PY'
+          import base64
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          raw = os.environ.get("ANDROID_KEYSTORE_BASE64", "")
+          clean = re.sub(r"\s+", "", raw)
+          print(f"ANDROID_KEYSTORE_BASE64 characters: {len(clean)}")
+
+          if not clean:
+              print("ANDROID_KEYSTORE_BASE64 is empty. Check the repository secret name and value.", file=sys.stderr)
+              sys.exit(1)
+
+          try:
+              decoded = base64.b64decode(clean, validate=True)
+          except Exception as exc:
+              print(f"ANDROID_KEYSTORE_BASE64 is not valid base64: {exc}", file=sys.stderr)
+              sys.exit(1)
+
+          if not decoded:
+              print("Decoded keystore is empty.", file=sys.stderr)
+              sys.exit(1)
+
+          Path("android/app/upload-keystore.jks").write_bytes(decoded)
+          print(f"Decoded keystore bytes: {len(decoded)}")
+          PY
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
