@@ -29,6 +29,7 @@ import {
   normalizeHouseholdType,
 } from '../householdPreferences';
 import { AppTheme, rootAppearanceAttributes } from '../appearance';
+import { BarcodeMappings, normalizeBarcodeMappings } from '../barcodeMappings';
 
 export function useAppState() {
   const [pantry, setPantry] = usePersistedState<FoodItem[]>('pp:pantry', initialPantry);
@@ -53,11 +54,13 @@ export function useAppState() {
     defaultReminderPreferences,
   );
   const [userMeals, setUserMeals] = usePersistedState<Meal[]>('pp:userMeals', []);
+  const [rawBarcodeMappings, setBarcodeMappings] = usePersistedState<BarcodeMappings>('pp:barcodeMappings', {});
 
   const mealsData: Meal[] = [...userMeals, ...baseMeals, ...curatedMeals];
   const householdType = normalizeHouseholdType(rawHouseholdType);
   const reminderPrefs = normalizeReminderPreferences(rawReminderPrefs);
   const dietPrefs = normalizeDietPreferences(rawDietPrefs);
+  const barcodeMappings = normalizeBarcodeMappings(rawBarcodeMappings);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -108,6 +111,8 @@ export function useAppState() {
     setReminderPrefs: setRawReminderPrefs,
     userMeals,
     setUserMeals,
+    barcodeMappings,
+    setBarcodeMappings,
     mealsData,
   };
 }

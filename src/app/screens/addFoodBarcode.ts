@@ -1,4 +1,5 @@
 import type { BarcodeLookup } from '../../lib/barcode';
+import { barcodeMappingToLookup, type BarcodeMappings } from '../barcodeMappings';
 
 export type AddFoodBarcodeDraft = {
   name?: string;
@@ -21,4 +22,10 @@ export function barcodeLookupToDraft(result: BarcodeLookup): AddFoodBarcodeDraft
     ...(result.suggestedExpiryDays ? { days: String(result.suggestedExpiryDays) } : {}),
     ...(result.imageUrl ? { photo: result.imageUrl } : {}),
   };
+}
+
+export function resolveBarcodeLookup(result: BarcodeLookup, mappings: BarcodeMappings): BarcodeLookup {
+  if (result.found) return result;
+  const mapping = mappings[result.barcode];
+  return mapping ? barcodeMappingToLookup(mapping) : result;
 }

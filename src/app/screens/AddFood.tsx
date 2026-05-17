@@ -7,7 +7,12 @@ import { PhotoUpload } from '../components/PhotoUpload';
 import { FrequentItems } from '../components/FrequentItems';
 import type { BarcodeLookup } from '../../lib/barcode';
 import { buildFoodItemPayload } from './addFoodPayload';
-import { barcodeLookupToDraft } from './addFoodBarcode';
+import { barcodeLookupToDraft, resolveBarcodeLookup } from './addFoodBarcode';
+import {
+  BarcodeMappings,
+  BarcodeMapping,
+  foodItemToBarcodeMapping,
+} from '../barcodeMappings';
 
 const BarcodeScanner = lazy(() => import('../components/BarcodeScanner').then((m) => ({ default: m.BarcodeScanner })));
 const categories = ['Produce', 'Dairy', 'Protein', 'Grains', 'Snacks', 'Frozen', 'Other'];
@@ -20,6 +25,8 @@ export function AddFood({
   onSave,
   onError,
   purchaseHistory = [],
+  barcodeMappings = {},
+  onSaveBarcodeMapping,
 }: {
   initial?: FoodItem;
   mode?: 'add' | 'edit';
@@ -27,6 +34,8 @@ export function AddFood({
   onSave: (item: FoodItem) => void;
   onError?: () => void;
   purchaseHistory?: PurchaseHistory[];
+  barcodeMappings?: BarcodeMappings;
+  onSaveBarcodeMapping?: (mapping: BarcodeMapping) => void;
 }) {
   const [name, setName] = useState(initial?.name ?? '');
   const [quantity, setQuantity] = useState(initial?.quantity ?? 1);
@@ -40,6 +49,7 @@ export function AddFood({
   const [photo, setPhoto] = useState<string | undefined>(initial?.photo);
   const [touched, setTouched] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const [manualBarcode, setManualBarcode] = useState<string | undefined>();
 
   // Smart suggestions based on name
   useEffect(() => {
@@ -57,7 +67,7 @@ export function AddFood({
       onError?.();
       return;
     }
-    onSave(buildFoodItemPayload({
+    const item = buildFoodItemPayload({
       initial,
       name,
       quantity,
@@ -69,7 +79,13 @@ export function AddFood({
       emoji,
       photo,
       notes,
-    }));
+    });
+
+    if (mode === 'add' && manualBarcode) {
+      onSaveBarcodeMapping?.(foodItemToBarcodeMapping(manualBarcode, item));
+    }
+
+    onSave(item);
   }
 
   const nameError = touched && !name.trim();
@@ -86,7 +102,8 @@ export function AddFood({
 
   function handleScanResult(result: BarcodeLookup) {
     setScanning(false);
-    const draft = barcodeLookupToDraft(result);
+    setManualBarcode(result.found ? undefined : result.barcode);
+    const draft = barcodeLookupToDraft(resolveBarcodeLookup(result, barcodeMappings));
     if (draft.name) setName(draft.name);
     if (draft.category) setCategory(draft.category);
     if (draft.days) setDays(draft.days);

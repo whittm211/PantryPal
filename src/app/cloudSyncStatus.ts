@@ -23,6 +23,7 @@ export type CloudSyncSummary = {
 
 const SYNC_STALE_MS = 10_000;
 const KEY_LABELS: Record<string, string> = {
+  'pp:barcodeMappings': 'Barcode memory',
   'pp:cookHistory': 'Cooking history',
   'pp:dietPrefs': 'Diet preferences',
   'pp:favorites': 'Favorites',

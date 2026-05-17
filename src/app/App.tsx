@@ -111,6 +111,8 @@ function AppInner() {
     setReminderPrefs,
     userMeals,
     setUserMeals,
+    barcodeMappings,
+    setBarcodeMappings,
     mealsData,
   } = useAppState();
   const profile = resolveProfile({ mode, user, household, membershipRole });
@@ -326,6 +328,10 @@ function AppInner() {
           onSave={addPantryItem}
           onError={() => go({ name: 'errorSave' })}
           purchaseHistory={purchaseHistory}
+          barcodeMappings={barcodeMappings}
+          onSaveBarcodeMapping={(mapping) => {
+            setBarcodeMappings((current) => ({ ...current, [mapping.barcode]: mapping }));
+          }}
         />
       );
     } else if (t === 'list') {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { barcodeLookupToDraft } from './addFoodBarcode';
+import { barcodeLookupToDraft, resolveBarcodeLookup } from './addFoodBarcode';
 
 describe('barcodeLookupToDraft', () => {
   it('maps a found barcode lookup into add-food draft fields', () => {
@@ -27,6 +27,31 @@ describe('barcodeLookupToDraft', () => {
   it('preserves the scanned barcode in notes when lookup misses', () => {
     expect(barcodeLookupToDraft({ found: false, barcode: '000000' })).toEqual({
       notes: 'Scanned barcode: 000000',
+    });
+  });
+});
+
+describe('resolveBarcodeLookup', () => {
+  it('uses a saved manual mapping when remote barcode lookup misses', () => {
+    expect(resolveBarcodeLookup(
+      { found: false, barcode: '000123456789' },
+      {
+        '000123456789': {
+          barcode: '000123456789',
+          name: 'Black Beans',
+          category: 'Pantry',
+          emoji: 'BEAN',
+          suggestedExpiryDays: 365,
+          updatedAt: 1234,
+        },
+      },
+    )).toEqual({
+      found: true,
+      barcode: '000123456789',
+      name: 'Black Beans',
+      category: 'Pantry',
+      emoji: 'BEAN',
+      suggestedExpiryDays: 365,
     });
   });
 });
