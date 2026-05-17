@@ -5,6 +5,7 @@ import { rankMeals } from '../mealMatch';
 import { Clock, Flame, Heart, CalendarPlus, Plus } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { getMealPhoto } from '../mealPhotos';
+import { mealPantrySummary } from '../mealDisplay';
 
 type Chip = 'all' | 'quick' | 'family' | 'lowcost' | 'expiring' | 'favorites';
 
@@ -61,6 +62,7 @@ export function Meals({
       return true;
     })
     .filter((r) => activeDiets.length === 0 || activeDiets.every((d) => r.meal.dietTags?.includes(d)));
+  const hasActiveFilters = q.trim().length > 0 || chip !== 'all' || activeDiets.length > 0;
 
   return (
     <ScreenScroll>
@@ -86,7 +88,7 @@ export function Meals({
       )}
 
       <div className="pp-small" style={{ color: 'var(--pp-gray-700)' }}>
-        {ranked.length} recipes in your cookbook
+        {hasActiveFilters ? `${filtered.length} of ${ranked.length}` : ranked.length} recipes in your cookbook
       </div>
 
       <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
@@ -238,9 +240,7 @@ export function Meals({
                   </div>
                 )}
                 <div className="pp-small" style={{ marginTop: 8 }}>
-                  {usesExpiring
-                    ? `Uses ${expiringNames.join(', ')} before they expire`
-                    : `Uses ${meal.usesIds.map((id) => pantry.find((p) => p.id === id)?.name ?? id).join(', ')}`}
+                  {mealPantrySummary(meal, pantry, usesExpiring ? expiringNames : [])}
                 </div>
                 <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
                   <Button size="sm" variant="primary" onClick={() => onOpenRecipe && onOpenRecipe(meal.id)}>View</Button>
