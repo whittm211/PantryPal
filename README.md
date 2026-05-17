@@ -135,6 +135,8 @@ Add these repository secrets before using it:
 - `SUPABASE_ACCESS_TOKEN`: a Supabase personal access token.
 - `SUPABASE_PROJECT_ID`: the Supabase project ref, for example `lpmgqgyyzmdpujuwovrp`.
 
+The access token should come from Supabase account settings and starts with `sbp_`. Do not use the anon key or service role key for `SUPABASE_ACCESS_TOKEN`.
+
 The workflow runs when files under `supabase/functions/` change on `main`, or you can run `Deploy Supabase Functions` manually from GitHub Actions.
 
 For a local deploy with the Supabase CLI:

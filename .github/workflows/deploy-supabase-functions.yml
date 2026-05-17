@@ -24,5 +24,23 @@ jobs:
         with:
           version: latest
 
+      - name: Check Supabase secrets
+        shell: bash
+        run: |
+          if [ -z "$SUPABASE_PROJECT_ID" ]; then
+            echo "::error::SUPABASE_PROJECT_ID repository secret is missing or empty."
+            exit 1
+          fi
+
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN repository secret is missing or empty."
+            exit 1
+          fi
+
+          if [[ "$SUPABASE_ACCESS_TOKEN" != sbp_* ]]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN must be a Supabase personal access token that starts with sbp_."
+            exit 1
+          fi
+
       - name: Deploy Edge Functions
         run: supabase functions deploy make-server-e808db2a --project-ref "$SUPABASE_PROJECT_ID" --use-api
