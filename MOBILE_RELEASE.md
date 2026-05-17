@@ -40,6 +40,15 @@ GitHub Actions runs `Mobile Android Build` on pushes and pull requests. It build
 
 Successful runs upload a `PantryPal-debug-apk` artifact. Download it from the workflow run summary to install a debug build on an Android test device.
 
+The manual `Mobile Android Release Bundle` workflow builds a signed `.aab` for Google Play after these repository secrets are added:
+
+- `ANDROID_KEYSTORE_BASE64`: base64-encoded upload keystore file.
+- `ANDROID_KEYSTORE_PASSWORD`: upload keystore password.
+- `ANDROID_KEY_ALIAS`: upload key alias.
+- `ANDROID_KEY_PASSWORD`: upload key password.
+
+Generate the upload keystore outside the repo, then base64-encode it before adding the secret. Do not commit `.jks` or keystore password files.
+
 To run the same Android debug build locally after Java is installed:
 
 ```bash
