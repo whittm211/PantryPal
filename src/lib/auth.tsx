@@ -3,6 +3,7 @@ import type { Session, User } from '@supabase/supabase-js';
 import { isSupabaseConfigured, supabase } from './supabase';
 import { buildAuthProfileMetadata } from './authProfile';
 import { buildAuthRedirectUrl } from './authRedirect';
+import { resolveSignUpResult, type SignUpResult } from './authSignUp';
 
 type AuthMode = 'authenticated' | 'guest' | 'unauthenticated';
 
@@ -11,7 +12,7 @@ type AuthContextValue = {
   session: Session | null;
   mode: AuthMode;
   loading: boolean;
-  signUp: (email: string, password: string, displayName?: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName?: string) => Promise<SignUpResult>;
   signIn: (email: string, password: string) => Promise<void>;
   updateProfileName: (displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -53,12 +54,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(email: string, password: string, displayName?: string) {
     if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: displayName ? buildAuthProfileMetadata(displayName) : undefined },
+      options: {
+        data: displayName ? buildAuthProfileMetadata(displayName) : undefined,
+        emailRedirectTo: buildAuthRedirectUrl(window.location.origin, import.meta.env.BASE_URL),
+      },
     });
     if (error) throw error;
+    if (data.session) setSession(data.session);
+    return resolveSignUpResult(data.session);
   }
 
   async function signIn(email: string, password: string) {

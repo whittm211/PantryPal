@@ -72,7 +72,7 @@ function AppInner() {
       );
     } else if (mode === 'unauthenticated') {
       setRoute((r) =>
-        r.name === 'tab' || r.name === 'itemDetail' || r.name === 'editItem' || r.name === 'settings'
+        r.name === 'tab' || r.name === 'itemDetail' || r.name === 'editItem' || r.name === 'settings' || r.name === 'onboarding'
           ? { name: 'welcome' }
           : r,
       );

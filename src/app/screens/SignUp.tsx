@@ -28,8 +28,13 @@ export function SignUp({
     }
     setBusy(true);
     try {
-      await signUp(validation.value.email, validation.value.password, validation.value.name);
-      toast.success('Account created — check your email to confirm');
+      const result = await signUp(validation.value.email, validation.value.password, validation.value.name);
+      if (result.needsEmailConfirmation) {
+        toast.success('Account created - check your email to confirm, then sign in');
+        onSignIn();
+        return;
+      }
+      toast.success('Account created');
       onSuccess();
     } catch (err: any) {
       toast.error(err?.message ?? 'Sign up failed');
@@ -78,7 +83,7 @@ export function SignUp({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--pp-sp-3)', marginTop: 'auto' }}>
         <Button variant="primary" size="lg" fullWidth onClick={submit}>
-          {busy ? 'Creating account…' : 'Create Account'}
+          {busy ? 'Creating account...' : 'Create Account'}
         </Button>
         <Button variant="secondary" size="lg" fullWidth onClick={onSignIn}>
           I already have an account
