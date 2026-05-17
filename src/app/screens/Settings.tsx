@@ -1110,8 +1110,8 @@ export function Settings({
               <CreditCard size={18} />
             </div>
             <div style={{ flex: 1 }}>
-              <div className="pp-strong" style={{ marginBottom: 4 }}>Plans & iOS payments</div>
-              <div className="pp-small">Preview Free and Plus before StoreKit is connected.</div>
+              <div className="pp-strong" style={{ marginBottom: 4 }}>Plans & mobile payments</div>
+              <div className="pp-small">Preview Free and Plus before StoreKit and Play Billing are connected.</div>
             </div>
             <ChevronRight size={16} color="var(--pp-gray-500)" />
           </Card>

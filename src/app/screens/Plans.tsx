@@ -2,7 +2,7 @@ import { CheckCircle2, Clock, CreditCard, Lock, Sparkles } from 'lucide-react';
 import { Badge, Button, Card, ScreenScroll, SectionHeader } from '../components/ui';
 import {
   buildPlanComparison,
-  iosPaymentReadinessItems,
+  mobilePaymentReadinessItems,
   pantryPalPlans,
   type PaymentReadinessStatus,
 } from '../billingPlans';
@@ -33,7 +33,7 @@ export function Plans({ onBack }: { onBack: () => void }) {
         <div>
           <div className="pp-h3" style={{ color: 'var(--pp-white)' }}>PantryPal Plus</div>
           <div className="pp-small" style={{ color: 'var(--pp-overlay-white-85)' }}>
-            Payment setup preview for the iOS release.
+            Payment setup preview for iOS and Android.
           </div>
         </div>
       </Card>
@@ -96,9 +96,9 @@ export function Plans({ onBack }: { onBack: () => void }) {
       </div>
 
       <div>
-        <SectionHeader title="iOS payment setup" />
+        <SectionHeader title="Mobile payment setup" />
         <Card style={{ marginTop: 8, display: 'grid', gap: 10 }}>
-          {iosPaymentReadinessItems.map((item) => (
+          {mobilePaymentReadinessItems.map((item) => (
             <div key={item.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
               <div style={{
                 width: 32,
@@ -128,7 +128,7 @@ export function Plans({ onBack }: { onBack: () => void }) {
         <div>
           <div className="pp-strong" style={{ fontSize: 14 }}>No real charges yet</div>
           <div className="pp-small">
-            iOS subscriptions should be connected through Apple In-App Purchase after the Capacitor app shell is ready.
+            Mobile subscriptions should use Apple In-App Purchase on iOS and Google Play Billing on Android after the Capacitor app shells are ready.
           </div>
         </div>
       </Card>

@@ -42,40 +42,46 @@ export const pantryPalPlans: BillingPlan[] = [
     id: 'plus',
     name: 'PantryPal Plus',
     priceLabel: '$4.99/mo',
-    description: 'Smarter kitchen help for meal planning, savings, and iOS release.',
+    description: 'Smarter kitchen help for meal planning, savings, and the mobile release.',
     features: [
       'AI Chef pantry-aware suggestions',
       'Fridge Rescue mode',
       'Shared household barcode memory',
       'Future receipt scanning support',
     ],
-    ctaLabel: 'Coming soon for iOS',
+    ctaLabel: 'Coming soon for mobile',
   },
 ];
 
-export const iosPaymentReadinessItems: PaymentReadinessItem[] = [
+export const mobilePaymentReadinessItems: PaymentReadinessItem[] = [
   {
     id: 'plans',
     label: 'Define Free and Plus plans',
-    detail: 'Use the same plan names and benefits in the app and App Store Connect.',
+    detail: 'Use the same plan names and benefits in the app, App Store Connect, and Google Play Console.',
     status: 'done',
   },
   {
     id: 'capacitor',
-    label: 'Create iOS app shell',
-    detail: 'Wrap PantryPal with Capacitor and generate the Xcode project.',
+    label: 'Create iOS and Android app shells',
+    detail: 'Wrap PantryPal with Capacitor and generate Xcode and Android Studio projects.',
     status: 'next',
   },
   {
     id: 'storekit',
-    label: 'Connect StoreKit purchases',
+    label: 'Connect Apple StoreKit purchases',
     detail: 'Use Apple In-App Purchase for iOS subscriptions before App Review.',
     status: 'blocked',
   },
   {
+    id: 'play-billing',
+    label: 'Connect Google Play Billing',
+    detail: 'Use Google Play Billing for Android subscriptions before Play Store review.',
+    status: 'blocked',
+  },
+  {
     id: 'testflight',
-    label: 'Test with TestFlight',
-    detail: 'Verify signup, restore purchases, and subscription states on a real iPhone.',
+    label: 'Test with TestFlight and Play internal testing',
+    detail: 'Verify signup, restore purchases, and subscription states on real iPhone and Android devices.',
     status: 'blocked',
   },
 ];
