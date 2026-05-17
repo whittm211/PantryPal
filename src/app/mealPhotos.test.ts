@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Meal } from './data';
+import { meals, type Meal } from './data';
 import { curatedMeals } from './curatedMeals';
 import { getMealPhoto, mealPhotoRegistry } from './mealPhotos';
 
@@ -35,5 +35,13 @@ describe('getMealPhoto', () => {
 
   it('generated curated meals do not carry shared cuisine image URLs', () => {
     expect(curatedMeals.some((meal) => meal.image)).toBe(false);
+  });
+
+  it('approves every hand-curated seed meal that still has a photo candidate', () => {
+    const seededPhotoMeals = meals.filter((meal) => meal.image);
+
+    expect(seededPhotoMeals.map((meal) => [meal.id, getMealPhoto(meal)?.alt])).toEqual(
+      seededPhotoMeals.map((meal) => [meal.id, meal.name]),
+    );
   });
 });
