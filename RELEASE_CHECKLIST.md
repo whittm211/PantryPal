@@ -19,6 +19,7 @@ Last updated: 2026-05-17
 - [x] Recipe detail shows ingredients, instructions, prep time, cook time, difficulty, servings, and nutrition when available.
 - [x] Settings includes preferences, sync status, export/import, and Privacy & support.
 - [x] Source text encoding guard is in place.
+- [x] App Store listing, privacy, screenshot, and subscription prep worksheet exists in [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md).
 
 ## Verification Commands
 
@@ -58,6 +59,7 @@ Check:
 - Add a dedicated support/contact page or support email.
 - Add admin cleanup tools for test accounts and test data.
 - Consider packaged mobile distribution if PantryPal needs app store presence.
+- Complete the Apple Developer membership activation, then follow [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md) for TestFlight.
 
 ## Admin Cleanup
 
