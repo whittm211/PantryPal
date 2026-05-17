@@ -23,7 +23,16 @@ const backup: ExportData = {
   }],
   settings: {
     householdType: 'single',
-    dietPrefs: { diets: [], allergies: [], dailyCalorieGoal: 2000 },
+    dietPrefs: {
+      diets: [],
+      allergies: [],
+      dailyCalorieGoal: 2000,
+      dislikedIngredients: [],
+      preferredCookTime: 30,
+      budgetLevel: 'medium',
+      servingSize: 2,
+      cookingSkill: 'intermediate',
+    },
     theme: 'light',
     largeText: false,
     highContrast: false,

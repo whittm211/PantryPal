@@ -120,6 +120,11 @@ export interface DietPreferences {
   diets: DietTag[];
   allergies: string[];
   dailyCalorieGoal: number;
+  dislikedIngredients: string[];
+  preferredCookTime: number;
+  budgetLevel: 'low' | 'medium' | 'flexible';
+  servingSize: number;
+  cookingSkill: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export type GrocerySection = 'produce' | 'dairy' | 'protein' | 'grains' | 'frozen' | 'pantry' | 'other';
@@ -155,7 +160,36 @@ export const defaultDietPrefs: DietPreferences = {
   diets: [],
   allergies: [],
   dailyCalorieGoal: 2000,
+  dislikedIngredients: [],
+  preferredCookTime: 30,
+  budgetLevel: 'medium',
+  servingSize: 2,
+  cookingSkill: 'intermediate',
 };
+
+export function normalizeDietPreferences(value: Partial<DietPreferences> | null | undefined): DietPreferences {
+  const prefs = value ?? {};
+  return {
+    diets: Array.isArray(prefs.diets) ? prefs.diets : defaultDietPrefs.diets,
+    allergies: Array.isArray(prefs.allergies) ? prefs.allergies.filter((item) => typeof item === 'string') : [],
+    dailyCalorieGoal: positiveNumberOrDefault(prefs.dailyCalorieGoal, defaultDietPrefs.dailyCalorieGoal),
+    dislikedIngredients: Array.isArray(prefs.dislikedIngredients)
+      ? prefs.dislikedIngredients.filter((item) => typeof item === 'string')
+      : [],
+    preferredCookTime: positiveNumberOrDefault(prefs.preferredCookTime, defaultDietPrefs.preferredCookTime),
+    budgetLevel: prefs.budgetLevel === 'low' || prefs.budgetLevel === 'medium' || prefs.budgetLevel === 'flexible'
+      ? prefs.budgetLevel
+      : defaultDietPrefs.budgetLevel,
+    servingSize: positiveNumberOrDefault(prefs.servingSize, defaultDietPrefs.servingSize),
+    cookingSkill: prefs.cookingSkill === 'beginner' || prefs.cookingSkill === 'intermediate' || prefs.cookingSkill === 'advanced'
+      ? prefs.cookingSkill
+      : defaultDietPrefs.cookingSkill,
+  };
+}
+
+function positiveNumberOrDefault(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
+}
 
 export const dietLabels: Record<DietTag, string> = {
   'vegetarian': 'Vegetarian',

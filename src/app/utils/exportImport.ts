@@ -4,6 +4,7 @@ import {
   FoodItem,
   GroceryItem,
   Meal,
+  normalizeDietPreferences,
   PurchaseHistory,
 } from '../data';
 import type { AppTheme } from '../appearance';
@@ -283,7 +284,7 @@ function validateExportSettings(value: unknown): ExportSettings | null {
 
   return {
     householdType: normalizeHouseholdType(value.householdType),
-    dietPrefs: value.dietPrefs,
+    dietPrefs: normalizeDietPreferences(value.dietPrefs),
     theme: value.theme,
     largeText: value.largeText,
     highContrast: value.highContrast,

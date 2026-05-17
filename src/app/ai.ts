@@ -1,5 +1,13 @@
-import { FoodItem, Meal, DietPreferences, CookHistoryEntry, dietLabels } from './data';
+import { CookHistoryEntry, DietPreferences, FoodItem, Meal } from './data';
 import { getMealPhoto } from './mealPhotos';
+import {
+  AIChefMode,
+  buildAIChefPromptContext,
+  buildGroceryUnlocks,
+  GroceryUnlock,
+  scoreMealForAI,
+  SmartSubstitution,
+} from './aiChefContext';
 
 export interface AISuggestion {
   id: string;
@@ -12,23 +20,33 @@ export interface AISuggestion {
   rationale: string;
   usesIngredients: string[];
   missingIngredients: string[];
+  expiringIngredients: string[];
+  substitutions: SmartSubstitution[];
+  groceryUnlocks: GroceryUnlock[];
   matchScore: number;
+  prepTime?: string;
+  cookTime?: string;
+  servings?: number;
+  ingredients?: string[];
+  instructions?: string[];
   image?: string;
 }
 
-// Curated fallback images for AI-improvised (novel) dishes. Keyed by goal so
-// the result still feels relevant when there's no underlying meal in the
-// library to borrow an image from.
-export const novelDishImages: Record<string, string> = {
-  'use-expiring': 'https://images.unsplash.com/photo-1524394071506-4c3fde76077b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
-  'quick': 'https://images.unsplash.com/photo-1631233190752-35764ef80331?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
-  'healthy': 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
-  'comfort': 'https://images.unsplash.com/photo-1667499989723-c4ab9549d63c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
-  'surprise': 'https://images.unsplash.com/photo-1566670735661-a3af40a3b4df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+export const novelDishImages: Record<AIChefMode, string> = {
+  'fridge-rescue': 'https://images.unsplash.com/photo-1524394071506-4c3fde76077b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  lazy: 'https://images.unsplash.com/photo-1631233190752-35764ef80331?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  budget: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  'high-protein': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  healthy: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  comfort: 'https://images.unsplash.com/photo-1667499989723-c4ab9549d63c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  'kid-friendly': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  '15-minute': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  'one-pan': 'https://images.unsplash.com/photo-1559847844-5315695dadae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
+  surprise: 'https://images.unsplash.com/photo-1566670735661-a3af40a3b4df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080&q=80',
 };
 
-export function pickNovelImage(goal: string): string {
-  return novelDishImages[goal] ?? novelDishImages['surprise'];
+export function pickNovelImage(mode: string): string {
+  return novelDishImages[mode as AIChefMode] ?? novelDishImages.surprise;
 }
 
 export interface AIRequest {
@@ -36,113 +54,99 @@ export interface AIRequest {
   meals: Meal[];
   prefs: DietPreferences;
   history: CookHistoryEntry[];
-  goal: 'use-expiring' | 'quick' | 'healthy' | 'comfort' | 'surprise';
+  mode: AIChefMode;
   servings: number;
+  promptContext?: string;
 }
 
-// Mock LLM call. Swap with a real provider by setting AI_API_KEY and
-// replacing the body with a fetch to your /chat/completions endpoint.
 const AI_API_KEY = 'YOUR_API_KEY_HERE';
 
 export async function generateMealRecommendations(req: AIRequest): Promise<AISuggestion[]> {
-  // Simulate network latency
-  await new Promise((r) => setTimeout(r, 900 + Math.random() * 700));
+  await new Promise((resolve) => setTimeout(resolve, 650 + Math.random() * 450));
 
-  // Real-world: POST to provider with a structured prompt and parse JSON back.
-  // For the prototype we score the curated meal library + improvise one novel idea.
+  // This structured prompt is intentionally built outside the UI. A future real
+  // provider can consume the same context while the local fallback stays useful.
+  const promptContext = req.promptContext ?? buildAIChefPromptContext(req);
   void AI_API_KEY;
+  void promptContext;
 
-  const expiringIds = new Set(
-    req.pantry.filter((p) => p.expiresInDays <= 4).map((p) => p.id),
-  );
-  const pantryNames = new Set(req.pantry.map((p) => p.name.toLowerCase()));
-  const recentMealIds = new Set(req.history.slice(-3).map((h) => h.mealId));
-
-  const scored = req.meals.map((m) => {
-    const have = m.usesIds.filter((id) => req.pantry.some((p) => p.id === id));
-    const missing = m.usesIds.filter((id) => !req.pantry.some((p) => p.id === id));
-    const usesExpiring = m.usesIds.some((id) => expiringIds.has(id));
-    const minutes = parseInt(m.time, 10) || 30;
-    const dietsOk =
-      req.prefs.diets.length === 0 ||
-      req.prefs.diets.every((d) => m.dietTags?.includes(d));
-    const calorieFit =
-      m.calories && req.prefs.dailyCalorieGoal
-        ? 1 - Math.min(1, Math.abs(m.calories - req.prefs.dailyCalorieGoal / 3) / 600)
-        : 0.5;
-
-    let score = have.length * 2 - missing.length * 1.2;
-    if (usesExpiring) score += 4;
-    if (recentMealIds.has(m.id)) score -= 2;
-    if (req.goal === 'use-expiring' && usesExpiring) score += 3;
-    if (req.goal === 'quick' && minutes <= 20) score += 3;
-    if (req.goal === 'healthy') score += calorieFit * 2;
-    if (req.goal === 'comfort' && m.difficulty !== 'Hard') score += 1;
-    if (!dietsOk) score -= 10;
-
-    return { meal: m, have, missing, usesExpiring, score, dietsOk };
-  });
-
-  const top = scored
-    .filter((s) => s.dietsOk)
+  const recentMealIds = new Set(req.history.slice(-3).map((entry) => entry.mealId));
+  const groceryUnlocks = buildGroceryUnlocks(req.meals);
+  const scored = req.meals
+    .map((meal) => {
+      const dietsOk =
+        req.prefs.diets.length === 0 ||
+        req.prefs.diets.every((diet) => meal.dietTags?.includes(diet));
+      return {
+        ...scoreMealForAI(meal, req.pantry, { mode: req.mode, prefs: req.prefs, recentMealIds }),
+        dietsOk,
+      };
+    })
+    .filter((item) => item.dietsOk)
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
 
-  const rationale = (s: typeof scored[number]): string => {
-    const bits: string[] = [];
-    if (s.usesExpiring) {
-      const names = s.meal.usesIds
-        .filter((id) => expiringIds.has(id))
-        .map((id) => req.pantry.find((p) => p.id === id)?.name)
-        .filter(Boolean) as string[];
-      if (names.length) bits.push(`uses ${names.join(' & ')} before they expire`);
-    }
-    if (s.have.length === s.meal.usesIds.length) bits.push('all ingredients on hand');
-    else if (s.missing.length === 1) bits.push('only one item to buy');
-    if (req.goal === 'quick' && parseInt(s.meal.time, 10) <= 20) bits.push('under 20 minutes');
-    if (req.goal === 'healthy' && s.meal.calories && s.meal.calories < 450) bits.push('balanced macros');
-    if (req.prefs.diets.length) bits.push(`matches ${req.prefs.diets.map((d) => dietLabels[d]).join(', ')}`);
-    if (bits.length === 0) bits.push('a solid match for what you have');
-    return bits.join(' · ');
-  };
-
-  const suggestions: AISuggestion[] = top.map((s, i) => ({
-    id: `ai-${Date.now()}-${i}`,
-    mealId: s.meal.id,
-    name: s.meal.name,
-    emoji: s.meal.emoji,
-    time: s.meal.time,
-    difficulty: s.meal.difficulty,
-    calories: s.meal.calories ?? 0,
-    rationale: rationale(s),
-    usesIngredients: s.meal.usesIds
-      .map((id) => req.pantry.find((p) => p.id === id)?.name)
-      .filter(Boolean) as string[],
-    missingIngredients: s.meal.missingIds,
-    matchScore: Math.min(99, Math.max(40, Math.round(60 + s.score * 4))),
-    image: getMealPhoto(s.meal)?.url,
+  const suggestions: AISuggestion[] = scored.map((item, index) => ({
+    id: `ai-${Date.now()}-${index}`,
+    mealId: item.meal.id,
+    name: item.meal.name,
+    emoji: item.meal.emoji,
+    time: item.meal.time,
+    difficulty: item.meal.difficulty,
+    calories: item.meal.calories ?? 0,
+    rationale: buildRationale(item, req.mode),
+    usesIngredients: item.ownedIngredients,
+    missingIngredients: item.missingIngredients,
+    expiringIngredients: item.expiringIngredients,
+    substitutions: item.substitutions,
+    groceryUnlocks,
+    matchScore: item.matchScore,
+    prepTime: item.meal.prepTime,
+    cookTime: item.meal.cookTime,
+    servings: req.servings,
+    ingredients: item.meal.ingredients.map((ingredient) => `${ingredient.amount} ${ingredient.unit} ${ingredient.name}`.trim()),
+    instructions: item.meal.instructions,
+    image: getMealPhoto(item.meal)?.url,
   }));
 
-  // Improvised novel idea if we have ≥3 pantry items with names
   if (req.pantry.length >= 3) {
     const picks = [...req.pantry]
       .sort((a, b) => a.expiresInDays - b.expiresInDays)
       .slice(0, 3);
-    const novel: AISuggestion = {
+    suggestions.push({
       id: `ai-novel-${Date.now()}`,
       name: `${picks[1].name} & ${picks[0].name} Bowl`,
       emoji: '🥣',
       time: '25 min',
       difficulty: 'Easy',
       calories: 420,
-      rationale: `Improvised dish using your ${picks.map((p) => p.name.toLowerCase()).join(', ')} — minimal cleanup.`,
-      usesIngredients: picks.map((p) => p.name),
+      rationale: `Improvised dish using your ${picks.map((item) => item.name.toLowerCase()).join(', ')} — minimal cleanup.`,
+      usesIngredients: picks.map((item) => item.name),
       missingIngredients: ['seasoning'],
+      expiringIngredients: picks.filter((item) => item.expiresInDays <= 4).map((item) => item.name),
+      substitutions: [],
+      groceryUnlocks,
       matchScore: 78,
-      image: pickNovelImage(req.goal),
-    };
-    suggestions.push(novel);
+      prepTime: '10 min',
+      cookTime: '15 min',
+      servings: req.servings,
+      ingredients: [...picks.map((item) => item.name), 'seasoning'],
+      instructions: ['Prep the pantry ingredients.', 'Cook everything together in a skillet or bowl base.', 'Season to taste and serve warm.'],
+      image: pickNovelImage(req.mode),
+    });
   }
 
   return suggestions;
+}
+
+function buildRationale(item: ReturnType<typeof scoreMealForAI>, mode: AIChefMode): string {
+  const bits: string[] = [];
+  if (item.expiringIngredients.length > 0) bits.push(`rescues ${item.expiringIngredients.join(' & ')}`);
+  if (item.missingIngredients.length === 0) bits.push('all key ingredients on hand');
+  else if (item.missingIngredients.length === 1) bits.push('only one item to buy');
+  if (mode === '15-minute' && parseInt(item.meal.time, 10) <= 15) bits.push('15 minutes or less');
+  if (mode === 'healthy' && item.meal.calories && item.meal.calories < 500) bits.push('balanced option');
+  if (mode === 'high-protein' && (item.meal.protein ?? 0) >= 25) bits.push('high protein');
+  if (item.preferenceWarnings.length > 0) bits.push('check preference warnings');
+  return bits.length > 0 ? bits.join(' · ') : 'a solid match for what you have';
 }

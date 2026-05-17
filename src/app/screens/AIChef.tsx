@@ -5,6 +5,7 @@ import { Badge, Button, Card, ScreenScroll, SectionHeader } from '../components/
 import { FoodItem, Meal, DietPreferences, CookHistoryEntry, dietLabels } from '../data';
 import { AISuggestion, generateMealRecommendations } from '../ai';
 import { getAIRecommendations } from '../../lib/aiChef';
+import { AIChefMode, aiChefModes, buildAIChefPromptContext } from '../aiChefContext';
 import { Sparkles, Clock, Flame, ChefHat, CalendarPlus, ShoppingCart, RefreshCw, Wand2 } from 'lucide-react';
 
 type Goal = 'use-expiring' | 'quick' | 'healthy' | 'comfort' | 'surprise';
@@ -34,8 +35,8 @@ export function AIChef({
   onAddToPlan: (mealId: string) => void;
   onAddMissingToList: (mealId: string) => void;
 }) {
-  const [goal, setGoal] = useState<Goal>('use-expiring');
-  const [servings, setServings] = useState(2);
+  const [mode, setMode] = useState<AIChefMode>('fridge-rescue');
+  const [servings, setServings] = useState(dietPrefs.servingSize);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [progress, setProgress] = useState(0);
@@ -46,14 +47,17 @@ export function AIChef({
     const tick = setInterval(() => setProgress((p) => Math.min(95, p + 7)), 120);
     try {
       let res: AISuggestion[];
+      const promptContext = buildAIChefPromptContext({
+        pantry, meals, prefs: dietPrefs, history, mode, servings,
+      });
       try {
         res = await getAIRecommendations({
-          pantry, meals, prefs: dietPrefs, history, goal, servings,
+          pantry, meals, prefs: dietPrefs, history, mode, servings, promptContext,
         });
       } catch (err) {
         console.warn('[AIChef] falling back to local heuristic', err);
         res = await generateMealRecommendations({
-          pantry, meals, prefs: dietPrefs, history, goal, servings,
+          pantry, meals, prefs: dietPrefs, history, mode, servings, promptContext,
         });
       }
       setSuggestions(res);
@@ -93,7 +97,7 @@ export function AIChef({
           <div style={{ flex: 1 }}>
             <div className="pp-card-title" style={{ color: 'var(--pp-white)' }}>AI Chef</div>
             <div className="pp-small" style={{ color: 'var(--pp-overlay-white-85)' }}>
-              Personalized suggestions from your pantry, diet & cooking history.
+              Pantry-aware suggestions using expiring food, preferences, and smart swaps.
             </div>
           </div>
         </div>
@@ -119,15 +123,16 @@ export function AIChef({
       </Card>
 
       <div>
-        <SectionHeader title="What are you in the mood for?" />
+        <SectionHeader title="Chef mode" />
         <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, marginTop: 'var(--pp-sp-2)' }}>
-          {GOALS.map((g) => {
-            const active = goal === g.value;
+          {aiChefModes.map((g) => {
+            const active = mode === g.value;
             return (
               <button
                 key={g.value}
-                onClick={() => setGoal(g.value)}
+                onClick={() => setMode(g.value)}
                 className="pp-button"
+                title={g.description}
                 style={{
                   padding: 'var(--pp-sp-2) var(--pp-sp-3)',
                   borderRadius: 'var(--pp-radius-full)',
@@ -164,6 +169,21 @@ export function AIChef({
             style={stepBtn}
           >+</button>
         </div>
+      </Card>
+
+      <Card style={{ padding: 'var(--pp-sp-3) var(--pp-sp-4)' }}>
+        <div className="pp-strong" style={{ fontSize: 14 }}>Kitchen context</div>
+        <div className="pp-small" style={{ marginTop: 4 }}>
+          {pantry.filter((item) => item.expiresInDays <= 4).length} expiring soon · {dietPrefs.preferredCookTime} min preferred · {dietPrefs.budgetLevel} budget · {dietPrefs.cookingSkill} skill
+        </div>
+        {(dietPrefs.allergies.length > 0 || dietPrefs.dislikedIngredients.length > 0) && (
+          <div className="pp-small" style={{ marginTop: 4 }}>
+            Avoiding {[
+              ...dietPrefs.allergies.map((item) => `${item} allergy`),
+              ...dietPrefs.dislikedIngredients,
+            ].join(', ')}
+          </div>
+        )}
       </Card>
 
       <Button variant="primary" size="lg" fullWidth onClick={generate}>
@@ -234,7 +254,7 @@ export function AIChef({
       )}
 
       <div className="pp-small" style={{ textAlign: 'center' }}>
-        Suggestions are generated from your pantry, dietary preferences, and cooking history.
+        Suggestions are generated from your pantry, expiring items, preferences, and cooking history.
       </div>
 
       <style>{`
@@ -258,6 +278,7 @@ function SuggestionCard({
   onAddToPlan: () => void;
   onAddMissing: () => void;
 }) {
+  const [showDetails, setShowDetails] = useState(false);
   return (
     <Card
       style={{
@@ -366,11 +387,65 @@ function SuggestionCard({
 
         {s.usesIngredients.length > 0 && (
           <div className="pp-small" style={{ marginTop: 'var(--pp-sp-2)' }}>
-            Uses: {s.usesIngredients.join(', ')}
+            Owned: {s.usesIngredients.join(', ')}
+          </div>
+        )}
+        {s.missingIngredients.length > 0 && (
+          <div className="pp-small" style={{ marginTop: 4 }}>
+            Missing: {s.missingIngredients.join(', ')}
+          </div>
+        )}
+        {s.expiringIngredients.length > 0 && (
+          <div className="pp-small" style={{ marginTop: 4, color: 'var(--pp-red-text)' }}>
+            Fridge rescue: {s.expiringIngredients.join(', ')}
+          </div>
+        )}
+        {s.substitutions.length > 0 && (
+          <div style={{ marginTop: 'var(--pp-sp-2)', display: 'grid', gap: 6 }}>
+            {s.substitutions.slice(0, 2).map((swap) => (
+              <div key={`${swap.ingredient}-${swap.substitute}`} className="pp-small" style={{
+                padding: '8px 10px',
+                borderRadius: 'var(--pp-radius-md)',
+                background: 'var(--pp-blue-soft)',
+                color: 'var(--pp-blue-text)',
+              }}>
+                Swap {swap.ingredient} → {swap.substitute}
+              </div>
+            ))}
+          </div>
+        )}
+        {s.groceryUnlocks.length > 0 && (
+          <div className="pp-small" style={{ marginTop: 'var(--pp-sp-2)' }}>
+            Buy {s.groceryUnlocks[0].ingredient} to unlock {s.groceryUnlocks[0].unlockCount} more meals.
+          </div>
+        )}
+
+        {showDetails && (
+          <div style={{
+            marginTop: 'var(--pp-sp-3)',
+            display: 'grid',
+            gap: 8,
+            padding: 'var(--pp-sp-3)',
+            border: '1px solid var(--pp-gray-200)',
+            borderRadius: 'var(--pp-radius-md)',
+            background: 'var(--pp-gray-50)',
+          }}>
+            <div className="pp-small">
+              Prep {s.prepTime ?? '10 min'} · Cook {s.cookTime ?? s.time} · Serves {s.servings ?? 2}
+            </div>
+            {s.ingredients && s.ingredients.length > 0 && (
+              <div className="pp-small">Ingredients: {s.ingredients.slice(0, 5).join(', ')}</div>
+            )}
+            {s.instructions && s.instructions.length > 0 && (
+              <div className="pp-small">First step: {s.instructions[0]}</div>
+            )}
           </div>
         )}
 
         <div style={{ marginTop: 'var(--pp-sp-3)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Button size="sm" variant={s.mealId ? 'ghost' : 'primary'} onClick={() => setShowDetails((value) => !value)}>
+            {showDetails ? 'Hide details' : 'Details'}
+          </Button>
           {s.mealId && (
             <Button size="sm" variant="primary" onClick={onOpen}>
               View recipe

@@ -13,6 +13,7 @@ import {
   initialGroceries,
   initialPantry,
   meals as baseMeals,
+  normalizeDietPreferences,
 } from '../data';
 import { curatedMeals } from '../curatedMeals';
 import { usePersistedState } from '../storage';
@@ -41,7 +42,7 @@ export function useAppState() {
     'pp:householdType',
     defaultHouseholdType,
   );
-  const [dietPrefs, setDietPrefs] = usePersistedState<DietPreferences>('pp:dietPrefs', defaultDietPrefs);
+  const [rawDietPrefs, setRawDietPrefs] = usePersistedState<DietPreferences>('pp:dietPrefs', defaultDietPrefs);
   const [theme, setTheme] = usePersistedState<AppTheme>('pp:theme', 'light');
   const [largeText, setLargeText] = usePersistedState<boolean>('pp:largeText', false);
   const [highContrast, setHighContrast] = usePersistedState<boolean>('pp:highContrast', false);
@@ -56,6 +57,7 @@ export function useAppState() {
   const mealsData: Meal[] = [...userMeals, ...baseMeals, ...curatedMeals];
   const householdType = normalizeHouseholdType(rawHouseholdType);
   const reminderPrefs = normalizeReminderPreferences(rawReminderPrefs);
+  const dietPrefs = normalizeDietPreferences(rawDietPrefs);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -91,7 +93,7 @@ export function useAppState() {
     householdType,
     setHouseholdType: setRawHouseholdType,
     dietPrefs,
-    setDietPrefs,
+    setDietPrefs: setRawDietPrefs,
     theme,
     setTheme,
     largeText,

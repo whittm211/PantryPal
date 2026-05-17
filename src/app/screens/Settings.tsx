@@ -261,6 +261,12 @@ export function Settings({
       : [...dietPrefs.diets, d];
     onUpdateDietPrefs({ ...dietPrefs, diets: next });
   }
+  function updatePreferenceList(key: 'allergies' | 'dislikedIngredients', value: string) {
+    onUpdateDietPrefs({
+      ...dietPrefs,
+      [key]: value.split(',').map((item) => item.trim()).filter(Boolean),
+    });
+  }
   function updateReminder(key: keyof ReminderPreferences, value: boolean) {
     onUpdateReminderPrefs(updateReminderPreference(reminderPrefs, key, value));
   }
@@ -914,6 +920,75 @@ export function Settings({
               onChange={(e) => onUpdateDietPrefs({ ...dietPrefs, dailyCalorieGoal: parseInt(e.target.value) })}
               style={{ flex: 1 }}
             />
+          </div>
+          <div style={{ marginTop: 14, display: 'grid', gap: 10 }}>
+            <label style={{ display: 'grid', gap: 6 }}>
+              <span className="pp-strong" style={{ fontSize: 14 }}>Allergies</span>
+              <input
+                value={dietPrefs.allergies.join(', ')}
+                onChange={(event) => updatePreferenceList('allergies', event.target.value)}
+                placeholder="peanuts, shellfish"
+                style={textInput}
+              />
+            </label>
+            <label style={{ display: 'grid', gap: 6 }}>
+              <span className="pp-strong" style={{ fontSize: 14 }}>Disliked ingredients</span>
+              <input
+                value={dietPrefs.dislikedIngredients.join(', ')}
+                onChange={(event) => updatePreferenceList('dislikedIngredients', event.target.value)}
+                placeholder="mushrooms, cilantro"
+                style={textInput}
+              />
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <label style={{ display: 'grid', gap: 6 }}>
+                <span className="pp-strong" style={{ fontSize: 14 }}>Cook time</span>
+                <input
+                  type="number"
+                  min={5}
+                  step={5}
+                  value={dietPrefs.preferredCookTime}
+                  onChange={(event) => onUpdateDietPrefs({ ...dietPrefs, preferredCookTime: parseInt(event.target.value, 10) || 30 })}
+                  style={textInput}
+                />
+              </label>
+              <label style={{ display: 'grid', gap: 6 }}>
+                <span className="pp-strong" style={{ fontSize: 14 }}>Servings</span>
+                <input
+                  type="number"
+                  min={1}
+                  value={dietPrefs.servingSize}
+                  onChange={(event) => onUpdateDietPrefs({ ...dietPrefs, servingSize: parseInt(event.target.value, 10) || 2 })}
+                  style={textInput}
+                />
+              </label>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <label style={{ display: 'grid', gap: 6 }}>
+                <span className="pp-strong" style={{ fontSize: 14 }}>Budget</span>
+                <select
+                  value={dietPrefs.budgetLevel}
+                  onChange={(event) => onUpdateDietPrefs({ ...dietPrefs, budgetLevel: event.target.value as DietPreferences['budgetLevel'] })}
+                  style={textInput}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </label>
+              <label style={{ display: 'grid', gap: 6 }}>
+                <span className="pp-strong" style={{ fontSize: 14 }}>Skill</span>
+                <select
+                  value={dietPrefs.cookingSkill}
+                  onChange={(event) => onUpdateDietPrefs({ ...dietPrefs, cookingSkill: event.target.value as DietPreferences['cookingSkill'] })}
+                  style={textInput}
+                >
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </label>
+            </div>
           </div>
         </Card>
       </div>
