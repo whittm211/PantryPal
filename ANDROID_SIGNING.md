@@ -73,6 +73,14 @@ Add:
 
 Do not paste the raw `.jks` file into chat or commit it to git.
 
+Before adding secrets, verify the generated files:
+
+```powershell
+.\scripts\verify-android-keystore.ps1
+```
+
+This checks that the keystore exists, the base64 file exists, and the base64 value decodes back to the same byte length as the keystore. It does not print the base64 secret.
+
 ## Build The Signed App Bundle
 
 After secrets are added, run:
