@@ -36,6 +36,17 @@ npm run mobile:ios
 7. Generate a signed Android App Bundle (`.aab`) for Play Store upload.
 8. Use Google Play internal testing before production release.
 
+GitHub Actions runs `Mobile Android Build` on pushes and pull requests. It builds the web assets, syncs Capacitor Android, and runs a debug APK build with Gradle.
+
+To run the same Android debug build locally after Java is installed:
+
+```bash
+npm run build
+npx cap sync android
+cd android
+./gradlew assembleDebug --no-daemon
+```
+
 ## iOS
 
 1. Use a Mac with Xcode installed for building and signing.
