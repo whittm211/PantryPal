@@ -7,18 +7,31 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Convert-SecureStringToPlainText {
+  param([Security.SecureString]$SecureString)
+
+  $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecureString)
+  try {
+    [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
+  } finally {
+    if ($ptr -ne [IntPtr]::Zero) {
+      [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
+    }
+  }
+}
+
 if (-not (Get-Command keytool -ErrorAction SilentlyContinue)) {
   throw "keytool was not found. Install a JDK and make sure JAVA_HOME/bin is on PATH."
 }
 
 if (-not $KeystorePassword) {
   $secure = Read-Host "Android upload keystore password" -AsSecureString
-  $KeystorePassword = ConvertFrom-SecureString $secure -AsPlainText
+  $KeystorePassword = Convert-SecureStringToPlainText $secure
 }
 
 if (-not $KeyPassword) {
   $secure = Read-Host "Android upload key password" -AsSecureString
-  $KeyPassword = ConvertFrom-SecureString $secure -AsPlainText
+  $KeyPassword = Convert-SecureStringToPlainText $secure
 }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null

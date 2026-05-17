@@ -26,5 +26,7 @@ describe('android keystore safety', () => {
     expect(script).toContain('.android-release');
     expect(script).toContain('keytool');
     expect(script).toContain('upload-keystore.base64.txt');
+    expect(script).toContain('SecureStringToBSTR');
+    expect(script).not.toContain('-AsPlainText');
   });
 });
