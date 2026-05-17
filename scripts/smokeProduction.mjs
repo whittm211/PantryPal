@@ -27,7 +27,14 @@ export function extractAssetUrls(html, baseUrl) {
 export function buildChecks(baseUrl, html) {
   return [
     { label: 'app shell', url: baseUrl },
+    ...buildStaticPageChecks(baseUrl),
     ...extractAssetUrls(html, baseUrl).map((url, index) => ({ label: `asset ${index + 1}`, url })),
+  ];
+}
+
+export function buildStaticPageChecks(baseUrl) {
+  return [
+    { label: 'privacy policy', url: new URL('privacy.html', baseUrl).href },
   ];
 }
 
@@ -57,6 +64,10 @@ export async function runSmokeCheck({ appUrl = DEFAULT_APP_URL, fetchImpl = fetc
   const assetUrls = extractAssetUrls(html, baseUrl);
   if (assetUrls.length === 0) {
     throw new Error(`app shell did not reference built assets (${baseUrl})`);
+  }
+
+  for (const check of buildStaticPageChecks(baseUrl)) {
+    await assertReachable(check, fetchImpl);
   }
 
   for (const [index, url] of assetUrls.entries()) {

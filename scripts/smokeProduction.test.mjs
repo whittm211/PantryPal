@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildChecks, extractAssetUrls, normalizeBaseUrl } from './smokeProduction.mjs';
+import { buildChecks, buildStaticPageChecks, extractAssetUrls, normalizeBaseUrl } from './smokeProduction.mjs';
 
 describe('production smoke helpers', () => {
   it('normalizes app urls with a trailing slash', () => {
@@ -26,7 +26,14 @@ describe('production smoke helpers', () => {
 
     expect(checks).toEqual([
       { label: 'app shell', url: 'https://whittm211.github.io/PantryPal/' },
+      { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
       { label: 'asset 1', url: 'https://whittm211.github.io/PantryPal/assets/index.js' },
+    ]);
+  });
+
+  it('builds static page checks for App Store required public pages', () => {
+    expect(buildStaticPageChecks('https://whittm211.github.io/PantryPal/')).toEqual([
+      { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
     ]);
   });
 });
