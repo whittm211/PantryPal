@@ -21,7 +21,13 @@ Do not commit `.android-release/`, `.jks`, `.keystore`, password files, or copie
 - `keytool` available in PowerShell.
 - Access to the PantryPal GitHub repository settings.
 
-Check `keytool`:
+Run the preflight check before generating the upload keystore:
+
+```powershell
+.\scripts\check-android-signing-prereqs.ps1
+```
+
+You can also check `keytool` directly:
 
 ```powershell
 keytool -help
