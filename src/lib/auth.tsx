@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import type { Session, User } from '@supabase/supabase-js';
 import { isSupabaseConfigured, supabase } from './supabase';
 import { buildAuthProfileMetadata } from './authProfile';
+import { buildAuthRedirectUrl } from './authRedirect';
 
 type AuthMode = 'authenticated' | 'guest' | 'unauthenticated';
 
@@ -86,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function resetPassword(email: string) {
     if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
+      redirectTo: buildAuthRedirectUrl(window.location.origin, import.meta.env.BASE_URL),
     });
     if (error) throw error;
   }
