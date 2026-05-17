@@ -24,6 +24,7 @@ Last updated: 2026-05-17
 - [x] Public privacy page is available at `/privacy.html` for App Store review.
 - [x] Public support page is available at `/support.html` for App Store review.
 - [x] Public terms page is available at `/terms.html` for subscriptions and App Store review.
+- [x] Public marketing page is available at `/marketing.html` for App Store Connect.
 
 ## Verification Commands
 
@@ -57,6 +58,7 @@ Check:
 - [ ] Public privacy page opens at `https://whittm211.github.io/PantryPal/privacy.html`.
 - [ ] Public support page opens at `https://whittm211.github.io/PantryPal/support.html`.
 - [ ] Public terms page opens at `https://whittm211.github.io/PantryPal/terms.html`.
+- [ ] Public marketing page opens at `https://whittm211.github.io/PantryPal/marketing.html`.
 
 ## Post-Launch Roadmap
 

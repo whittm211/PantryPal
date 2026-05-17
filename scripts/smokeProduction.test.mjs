@@ -29,6 +29,7 @@ describe('production smoke helpers', () => {
       { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
       { label: 'support page', url: 'https://whittm211.github.io/PantryPal/support.html' },
       { label: 'terms page', url: 'https://whittm211.github.io/PantryPal/terms.html' },
+      { label: 'marketing page', url: 'https://whittm211.github.io/PantryPal/marketing.html' },
       { label: 'asset 1', url: 'https://whittm211.github.io/PantryPal/assets/index.js' },
     ]);
   });
@@ -38,6 +39,7 @@ describe('production smoke helpers', () => {
       { label: 'privacy policy', url: 'https://whittm211.github.io/PantryPal/privacy.html' },
       { label: 'support page', url: 'https://whittm211.github.io/PantryPal/support.html' },
       { label: 'terms page', url: 'https://whittm211.github.io/PantryPal/terms.html' },
+      { label: 'marketing page', url: 'https://whittm211.github.io/PantryPal/marketing.html' },
     ]);
   });
 });
