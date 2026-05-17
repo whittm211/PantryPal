@@ -128,7 +128,7 @@ https://whittm211.github.io/PantryPal/
 
 ## Deploy Supabase Edge Functions
 
-The repo includes `.github/workflows/deploy-supabase-functions.yml` for the backend routes in `supabase/functions`.
+The repo includes `.github/workflows/deploy-supabase-functions.yml` for the backend routes in `supabase/functions/make-server-e808db2a`.
 
 Add these repository secrets before using it:
 
@@ -140,7 +140,7 @@ The workflow runs when files under `supabase/functions/` change on `main`, or yo
 For a local deploy with the Supabase CLI:
 
 ```powershell
-supabase functions deploy --project-ref lpmgqgyyzmdpujuwovrp
+supabase functions deploy make-server-e808db2a --project-ref lpmgqgyyzmdpujuwovrp --use-api
 ```
 
 ## Mobile Packaging Later
