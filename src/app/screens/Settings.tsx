@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, Card, ScreenScroll, SectionHeader, Badge } from '../components/ui';
-import { AlertCircle, Bell, CheckCircle2, Cloud, CloudOff, Eye, Loader2, LogOut, RefreshCw, User, Users, ChevronRight, Upload, FileJson, FileSpreadsheet, Moon, Sun, Smartphone, Heart, Salad, Plus, X, Trash2, Share2, Pencil } from 'lucide-react';
+import { AlertCircle, Bell, CheckCircle2, Cloud, CloudOff, CreditCard, Eye, Loader2, LogOut, RefreshCw, User, Users, ChevronRight, Upload, FileJson, FileSpreadsheet, Moon, Sun, Smartphone, Heart, Salad, Plus, X, Trash2, Share2, Pencil } from 'lucide-react';
 import { notificationsSupported, requestNotificationsPermission } from '../../lib/notifications';
 import { FoodItem, GroceryItem, PurchaseHistory, HouseholdMember, DietPreferences, DietTag, dietLabels } from '../data';
 import type { Meal } from '../data';
@@ -88,6 +88,7 @@ export function Settings({
   profile,
   reminderPrefs,
   barcodeMappings = {},
+  onOpenPlans,
   onImport,
   onUpdateHousehold,
   onUpdateHouseholdType,
@@ -118,6 +119,7 @@ export function Settings({
   profile: AppProfile;
   reminderPrefs: ReminderPreferences;
   barcodeMappings?: BarcodeMappings;
+  onOpenPlans?: () => void;
   onImport?: (data: ExportData) => void;
   onUpdateHousehold: (h: HouseholdMember[]) => void;
   onUpdateHouseholdType: (h: HouseholdType) => void;
@@ -1090,6 +1092,30 @@ export function Settings({
       <div>
         <SectionHeader title="Data" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
+          <Card
+            onClick={onOpenPlans}
+            style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12 }}
+          >
+            <div style={{
+              width: 40,
+              height: 40,
+              borderRadius: 'var(--pp-radius-full)',
+              background: 'var(--pp-blue-soft)',
+              color: 'var(--pp-blue-text)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <CreditCard size={18} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="pp-strong" style={{ marginBottom: 4 }}>Plans & iOS payments</div>
+              <div className="pp-small">Preview Free and Plus before StoreKit is connected.</div>
+            </div>
+            <ChevronRight size={16} color="var(--pp-gray-500)" />
+          </Card>
+
           <Card style={{ padding: '14px 16px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
               <Smartphone size={18} color="var(--pp-pantry-green)" style={{ marginTop: 1 }} />

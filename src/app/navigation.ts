@@ -13,6 +13,7 @@ export type Route =
   | { name: 'boughtSuccess' }
   | { name: 'errorSave' }
   | { name: 'settings' }
+  | { name: 'plans' }
   | { name: 'recipeDetail'; mealId: string }
   | { name: 'insights' }
   | { name: 'planner' }
@@ -42,6 +43,7 @@ export function activeTabForRoute(route: Route): Tab {
   ) {
     return 'home';
   }
+  if (route.name === 'plans') return 'settings';
   if (route.name === 'recipeDetail' || route.name === 'addRecipe') return 'meals';
   return 'home';
 }

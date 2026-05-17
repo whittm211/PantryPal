@@ -40,6 +40,7 @@ const BoughtSuccess = lazy(() => import('./screens/States').then((m) => ({ defau
 const EmptyPantry = lazy(() => import('./screens/States').then((m) => ({ default: m.EmptyPantry })));
 const ErrorState = lazy(() => import('./screens/States').then((m) => ({ default: m.ErrorState })));
 const SettingsScreen = lazy(() => import('./screens/Settings').then((m) => ({ default: m.Settings })));
+const Plans = lazy(() => import('./screens/Plans').then((m) => ({ default: m.Plans })));
 const RecipeDetail = lazy(() => import('./screens/RecipeDetail').then((m) => ({ default: m.RecipeDetail })));
 const Insights = lazy(() => import('./screens/Insights').then((m) => ({ default: m.Insights })));
 const MealPlanner = lazy(() => import('./screens/MealPlanner').then((m) => ({ default: m.MealPlanner })));
@@ -453,6 +454,7 @@ function AppInner() {
         profile={profile}
         reminderPrefs={reminderPrefs}
         barcodeMappings={barcodeMappings}
+        onOpenPlans={() => go({ name: 'plans' })}
         onImport={(data) => {
           setPantry(data.pantry);
           setGroceries(data.groceries);
@@ -483,6 +485,11 @@ function AppInner() {
         onDismissHouseholdJoinNotice={() => setHouseholdJoinNotice(false)}
       />
     );
+  } else if (route.name === 'plans') {
+    title = 'Plans';
+    showBack = true;
+    backTo = { name: 'settings' };
+    inner = <Plans onBack={() => go({ name: 'settings' })} />;
   } else if (route.name === 'errorSave') {
     chrome = false;
     inner = (
