@@ -6,6 +6,47 @@ import { buildAIChefPromptContext, buildGroceryUnlocks, scoreMealForAI } from '.
 import { getMealPhoto } from '../app/mealPhotos';
 
 const FN_URL = `https://${projectId}.supabase.co/functions/v1/make-server-e808db2a/ai-chef`;
+const AI_CHEF_TIMEOUT_MS = 8000;
+
+export async function postAIChefRequest({
+  token,
+  payload,
+  fetchImpl = fetch,
+  timeoutMs = AI_CHEF_TIMEOUT_MS,
+}: {
+  token: string;
+  payload: unknown;
+  fetchImpl?: typeof fetch;
+  timeoutMs?: number;
+}): Promise<unknown> {
+  const controller = new AbortController();
+  const timeout = globalThis.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetchImpl(FN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      signal: controller.signal,
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      throw new Error(`AI Chef request failed: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('AI Chef request timed out');
+    }
+    throw err;
+  } finally {
+    globalThis.clearTimeout(timeout);
+  }
+}
 
 export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion[]> {
   if (!isSupabaseConfigured) throw new Error('Supabase is not configured for this deployment.');
@@ -13,13 +54,9 @@ export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData.session?.access_token ?? publicAnonKey;
 
-  const res = await fetch(FN_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
+  const data = await postAIChefRequest({
+    token,
+    payload: {
       mode: req.mode,
       servings: req.servings,
       prefs: req.prefs,
@@ -27,15 +64,10 @@ export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion
       meals: req.meals,
       history: req.history,
       promptContext: req.promptContext ?? buildAIChefPromptContext(req),
-    }),
+    },
   });
-
-  if (!res.ok) {
-    throw new Error(`AI Chef request failed: ${res.status}`);
-  }
-
-  const data = await res.json();
-  const raw = Array.isArray(data?.suggestions) ? data.suggestions : [];
+  const rawData = data as { suggestions?: unknown };
+  const raw = Array.isArray(rawData?.suggestions) ? rawData.suggestions : [];
 
   const mealById = new Map(req.meals.map((m) => [m.id, m]));
   const recentMealIds = new Set(req.history.slice(-3).map((entry) => entry.mealId));
