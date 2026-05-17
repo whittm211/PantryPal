@@ -49,6 +49,19 @@ The manual `Mobile Android Release Bundle` workflow builds a signed `.aab` for G
 
 Generate the upload keystore outside the repo, then base64-encode it before adding the secret. Do not commit `.jks` or keystore password files.
 
+On Windows, use `scripts/generate-android-keystore.ps1`:
+
+```powershell
+.\scripts\generate-android-keystore.ps1
+```
+
+It writes local-only files under `.android-release/`:
+
+- `upload-keystore.jks`: keep this private and backed up.
+- `upload-keystore.base64.txt`: paste this file's contents into `ANDROID_KEYSTORE_BASE64`.
+
+The `.android-release/` directory and keystore file extensions are ignored by git.
+
 To run the same Android debug build locally after Java is installed:
 
 ```bash

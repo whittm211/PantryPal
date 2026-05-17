@@ -16,3 +16,8 @@ Thumbs.db
 .vite/
 coverage/
 supabase/.temp/
+
+# Local Android signing files. Never commit upload keystores or encoded secrets.
+.android-release/
+*.jks
+*.keystore
