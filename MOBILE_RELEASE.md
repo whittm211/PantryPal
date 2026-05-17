@@ -83,6 +83,26 @@ cd android
 
 The manual `Mobile iOS Build` workflow runs on a macOS GitHub runner. It builds the Capacitor iOS project as a simulator build with code signing disabled. This validates the Xcode project, but it does not create a signed App Store build.
 
+The manual `Mobile iOS Release Archive` workflow builds a signed iOS archive for TestFlight/App Store release candidates after these repository secrets are added:
+
+- `IOS_CERTIFICATE_BASE64`: base64-encoded Apple distribution `.p12` certificate.
+- `IOS_CERTIFICATE_PASSWORD`: password for the `.p12` certificate.
+- `IOS_PROVISION_PROFILE_BASE64`: base64-encoded App Store provisioning profile for `com.whittm211.pantrypal`.
+- `IOS_EXPORT_OPTIONS_PLIST_BASE64`: base64-encoded `ExportOptions.plist` configured for App Store distribution.
+- `IOS_KEYCHAIN_PASSWORD`: temporary CI keychain password used only during the GitHub Actions run.
+
+Create the certificate and provisioning profile from the Apple Developer portal, create the matching app record in App Store Connect, and keep the original signing files backed up outside the repo. Do not commit certificates, provisioning profiles, or export option files.
+
+On macOS, base64-encode each signing file before adding it as a GitHub Actions secret:
+
+```bash
+base64 -i ios_distribution.p12 | pbcopy
+base64 -i PantryPal.mobileprovision | pbcopy
+base64 -i ExportOptions.plist | pbcopy
+```
+
+Successful release workflow runs upload a `PantryPal-ios-release` artifact. Use the exported `.ipa` from that artifact for Transporter/App Store Connect upload, then send it through TestFlight before App Store review.
+
 ## Payments
 
 - iOS: Apple StoreKit / In-App Purchase.
