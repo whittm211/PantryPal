@@ -83,6 +83,7 @@ Before deploying a web MVP:
 - Run `npm run build`.
 - Test the guest flow in the browser.
 - Test account creation and login if Supabase auth is enabled.
+- Confirm Supabase Edge Functions are deployed if backend code changed.
 - Confirm import/export works from Settings.
 - Confirm no real credentials are committed.
 
@@ -116,6 +117,23 @@ The GitHub Pages URL will be:
 
 ```text
 https://whittm211.github.io/PantryPal/
+```
+
+## Deploy Supabase Edge Functions
+
+The repo includes `.github/workflows/deploy-supabase-functions.yml` for the backend routes in `supabase/functions`.
+
+Add these repository secrets before using it:
+
+- `SUPABASE_ACCESS_TOKEN`: a Supabase personal access token.
+- `SUPABASE_PROJECT_ID`: the Supabase project ref, for example `lpmgqgyyzmdpujuwovrp`.
+
+The workflow runs when files under `supabase/functions/` change on `main`, or you can run `Deploy Supabase Functions` manually from GitHub Actions.
+
+For a local deploy with the Supabase CLI:
+
+```powershell
+supabase functions deploy --project-ref lpmgqgyyzmdpujuwovrp
 ```
 
 ## Mobile Packaging Later
