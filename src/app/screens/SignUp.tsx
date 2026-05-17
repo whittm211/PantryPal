@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, InputField } from '../components/ui';
 import { Leaf } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { formatAuthError } from '../../lib/authError';
 import { toast } from 'sonner';
 import { validateSignUpForm } from '../signUpForm';
 
@@ -36,8 +37,8 @@ export function SignUp({
       }
       toast.success('Account created');
       onSuccess();
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Sign up failed');
+    } catch (err: unknown) {
+      toast.error(formatAuthError(err, 'signUp'));
     } finally {
       setBusy(false);
     }

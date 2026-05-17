@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, InputField } from '../components/ui';
 import { Leaf } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { formatAuthError } from '../../lib/authError';
 import { toast } from 'sonner';
 
 export function SignIn({
@@ -30,8 +31,8 @@ export function SignIn({
       await signIn(email.trim(), password);
       toast.success('Welcome back');
       onSuccess();
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Sign in failed');
+    } catch (err: unknown) {
+      toast.error(formatAuthError(err, 'signIn'));
     } finally {
       setBusy(false);
     }
@@ -71,7 +72,7 @@ export function SignIn({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--pp-sp-3)' }}>
         <InputField label="Email" value={email} onChange={setEmail} placeholder="you@example.com" type="email" />
-        <InputField label="Password" value={password} onChange={setPassword} placeholder="••••••••" type="password" />
+        <InputField label="Password" value={password} onChange={setPassword} placeholder="Password" type="password" />
         <button
           onClick={onForgot}
           className="pp-link"
@@ -83,7 +84,7 @@ export function SignIn({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--pp-sp-3)', marginTop: 'auto' }}>
         <Button variant="primary" size="lg" fullWidth onClick={submit}>
-          {busy ? 'Signing in…' : 'Sign In'}
+          {busy ? 'Signing in...' : 'Sign In'}
         </Button>
         <Button variant="secondary" size="lg" fullWidth onClick={onSignUp}>
           Create Account

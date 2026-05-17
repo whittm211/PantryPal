@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, InputField } from '../components/ui';
 import { KeyRound } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { formatAuthError } from '../../lib/authError';
 import { toast } from 'sonner';
 
 export function ForgotPassword({
@@ -23,10 +24,10 @@ export function ForgotPassword({
     setBusy(true);
     try {
       await resetPassword(email.trim());
-      toast.success('Reset link sent — check your email');
+      toast.success('Reset link sent - check your email');
       onDone();
-    } catch (err: any) {
-      toast.error(err?.message ?? 'Could not send reset email');
+    } catch (err: unknown) {
+      toast.error(formatAuthError(err, 'resetPassword'));
     } finally {
       setBusy(false);
     }
@@ -68,7 +69,7 @@ export function ForgotPassword({
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--pp-sp-3)', marginTop: 'auto' }}>
         <Button variant="primary" size="lg" fullWidth onClick={submit}>
-          {busy ? 'Sending…' : 'Send Reset Link'}
+          {busy ? 'Sending...' : 'Send Reset Link'}
         </Button>
         <button
           onClick={onBack}
