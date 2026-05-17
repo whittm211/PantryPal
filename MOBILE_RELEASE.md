@@ -38,6 +38,8 @@ npm run mobile:ios
 
 GitHub Actions runs `Mobile Android Build` on pushes and pull requests. It builds the web assets, syncs Capacitor Android, and runs a debug APK build with Gradle.
 
+Successful runs upload a `PantryPal-debug-apk` artifact. Download it from the workflow run summary to install a debug build on an Android test device.
+
 To run the same Android debug build locally after Java is installed:
 
 ```bash
