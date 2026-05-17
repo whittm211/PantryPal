@@ -100,6 +100,24 @@ For Vercel or Netlify:
 
 Both configs include a single-page-app fallback so deep links serve `index.html`.
 
+### GitHub Pages
+
+The repo also includes `.github/workflows/deploy-pages.yml`. To use it:
+
+1. In GitHub, open the repo settings.
+2. Go to `Pages`.
+3. Set `Build and deployment` source to `GitHub Actions`.
+4. Add repository secrets:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+5. Push to `main` or run the `Deploy to GitHub Pages` workflow manually.
+
+The GitHub Pages URL will be:
+
+```text
+https://whittm211.github.io/PantryPal/
+```
+
 ## Mobile Packaging Later
 
 After the web MVP is stable, package the existing React app with Capacitor:
