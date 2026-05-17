@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FoodItem, Meal } from './data';
-import { mealPantrySummary } from './mealDisplay';
+import { cookedMealActionLabel, mealPantrySummary } from './mealDisplay';
 
 const baseMeal: Meal = {
   id: 'meal',
@@ -42,5 +42,17 @@ describe('mealPantrySummary', () => {
     expect(mealPantrySummary(baseMeal, pantry, ['Milk', 'Yogurt'])).toBe(
       'Uses Milk, Yogurt before they expire',
     );
+  });
+});
+
+describe('cookedMealActionLabel', () => {
+  it('mentions ingredient updates when a recipe has linked pantry items', () => {
+    expect(cookedMealActionLabel({ ...baseMeal, usesIds: ['eggs'] })).toBe(
+      'I cooked this · Mark ingredients used',
+    );
+  });
+
+  it('mentions history only when a recipe has no linked pantry items', () => {
+    expect(cookedMealActionLabel(baseMeal)).toBe('I cooked this · Save to history');
   });
 });

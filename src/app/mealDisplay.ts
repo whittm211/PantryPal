@@ -13,3 +13,9 @@ export function mealPantrySummary(meal: Meal, pantry: FoodItem[], expiringNames:
 
   return `Uses ${usedItems.join(', ')}`;
 }
+
+export function cookedMealActionLabel(meal: Meal): string {
+  return meal.usesIds.length > 0
+    ? 'I cooked this · Mark ingredients used'
+    : 'I cooked this · Save to history';
+}

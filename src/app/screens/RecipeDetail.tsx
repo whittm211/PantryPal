@@ -5,6 +5,7 @@ import { Clock, Users, ChefHat, Flame, Check, ShoppingCart, Minus, Plus, Heart, 
 import { dietLabels } from '../data';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { getMealPhoto } from '../mealPhotos';
+import { cookedMealActionLabel } from '../mealDisplay';
 
 export function RecipeDetail({
   meal,
@@ -346,7 +347,7 @@ export function RecipeDetail({
           </Button>
         )}
         <Button variant="primary" size="lg" fullWidth onClick={onMarkUsed}>
-          I cooked this · Mark ingredients used
+          {cookedMealActionLabel(meal)}
         </Button>
         <Button variant="ghost" size="lg" fullWidth onClick={onBack}>
           Back to Meals
