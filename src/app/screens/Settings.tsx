@@ -52,6 +52,13 @@ import {
   summarizeCloudSync,
 } from '../cloudSyncStatus';
 import { launchInfoItems } from '../launchInfo';
+import {
+  BarcodeMappings,
+  clearBarcodeMappings,
+  listBarcodeMappingSummaries,
+  removeBarcodeMapping,
+  updateBarcodeMapping,
+} from '../barcodeMappings';
 
 const dietOptions: DietTag[] = ['vegetarian', 'vegan', 'gluten-free', 'low-carb', 'high-protein', 'dairy-free'];
 const AVATAR_COLORS = [
@@ -80,6 +87,7 @@ export function Settings({
   notifsEnabled = false,
   profile,
   reminderPrefs,
+  barcodeMappings = {},
   onImport,
   onUpdateHousehold,
   onUpdateHouseholdType,
@@ -90,6 +98,7 @@ export function Settings({
   onToggleHaptics,
   onToggleNotifs,
   onUpdateReminderPrefs,
+  onUpdateBarcodeMappings,
   householdJoinNotice = false,
   onDismissHouseholdJoinNotice,
 }: {
@@ -108,6 +117,7 @@ export function Settings({
   notifsEnabled?: boolean;
   profile: AppProfile;
   reminderPrefs: ReminderPreferences;
+  barcodeMappings?: BarcodeMappings;
   onImport?: (data: ExportData) => void;
   onUpdateHousehold: (h: HouseholdMember[]) => void;
   onUpdateHouseholdType: (h: HouseholdType) => void;
@@ -118,6 +128,7 @@ export function Settings({
   onToggleHaptics: (v: boolean) => void;
   onToggleNotifs?: (v: boolean) => void;
   onUpdateReminderPrefs: (v: ReminderPreferences) => void;
+  onUpdateBarcodeMappings?: (v: BarcodeMappings) => void;
   householdJoinNotice?: boolean;
   onDismissHouseholdJoinNotice?: () => void;
 }) {
@@ -139,6 +150,14 @@ export function Settings({
   const [editingProfileName, setEditingProfileName] = useState(false);
   const [profileNameDraft, setProfileNameDraft] = useState(profile.name);
   const [savingProfileName, setSavingProfileName] = useState(false);
+  const [editingBarcode, setEditingBarcode] = useState<string | null>(null);
+  const [barcodeDraft, setBarcodeDraft] = useState({
+    name: '',
+    brand: '',
+    category: '',
+    emoji: '',
+    suggestedExpiryDays: '7',
+  });
   const { user, updateProfileName } = useAuth();
 
   useEffect(() => {
@@ -431,6 +450,51 @@ export function Settings({
   const householdLeaveAvailable = canLeaveHousehold(isSignedIn, profile.roleLabel);
   const cloudSyncSummary = summarizeCloudSync(cloudSyncStatuses, Boolean(user), syncClock);
   const cloudSyncRows = cloudSyncDetailRows(cloudSyncStatuses);
+  const barcodeMemoryRows = listBarcodeMappingSummaries(barcodeMappings);
+
+  function deleteBarcodeMemory(barcode: string, name: string) {
+    onUpdateBarcodeMappings?.(removeBarcodeMapping(barcodeMappings, barcode));
+    if (editingBarcode === barcode) setEditingBarcode(null);
+    toast(`${name} barcode memory removed`);
+  }
+
+  function clearBarcodeMemory() {
+    onUpdateBarcodeMappings?.(clearBarcodeMappings(barcodeMappings));
+    setEditingBarcode(null);
+    toast('Barcode memory cleared');
+  }
+
+  function startEditingBarcodeMemory(barcode: string) {
+    const mapping = barcodeMappings[barcode];
+    if (!mapping) return;
+    setEditingBarcode(barcode);
+    setBarcodeDraft({
+      name: mapping.name,
+      brand: mapping.brand ?? '',
+      category: mapping.category,
+      emoji: mapping.emoji ?? '',
+      suggestedExpiryDays: String(mapping.suggestedExpiryDays),
+    });
+  }
+
+  function saveBarcodeMemoryEdit() {
+    if (!editingBarcode) return;
+    const name = barcodeDraft.name.trim();
+    const category = barcodeDraft.category.trim();
+    if (!name || !category) {
+      toast.error('Name and category are required');
+      return;
+    }
+    onUpdateBarcodeMappings?.(updateBarcodeMapping(barcodeMappings, editingBarcode, {
+      name,
+      brand: barcodeDraft.brand,
+      category,
+      emoji: barcodeDraft.emoji,
+      suggestedExpiryDays: parseInt(barcodeDraft.suggestedExpiryDays, 10) || 7,
+    }));
+    setEditingBarcode(null);
+    toast.success('Barcode memory updated');
+  }
 
   return (
     <ScreenScroll>
@@ -1027,6 +1091,128 @@ export function Settings({
         <SectionHeader title="Data" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
           <Card style={{ padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <Smartphone size={18} color="var(--pp-pantry-green)" style={{ marginTop: 1 }} />
+              <div style={{ flex: 1 }}>
+                <div className="pp-strong" style={{ marginBottom: 4 }}>Barcode memory</div>
+                <div className="pp-small">
+                  Saved manual barcode matches are personal to your account.
+                </div>
+              </div>
+              <Badge tone={barcodeMemoryRows.length > 0 ? 'green' : 'neutral'}>
+                {barcodeMemoryRows.length}
+              </Badge>
+            </div>
+            {barcodeMemoryRows.length === 0 ? (
+              <div
+                className="pp-small"
+                style={{
+                  marginTop: 12,
+                  padding: 12,
+                  borderRadius: 'var(--pp-radius-md)',
+                  background: 'var(--pp-gray-100)',
+                }}
+              >
+                When a scan misses and you save the item manually, PantryPal will remember it here.
+              </div>
+            ) : (
+              <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
+                {barcodeMemoryRows.map((mapping) => (
+                  <div
+                    key={mapping.barcode}
+                    style={{
+                      display: 'grid',
+                      gap: 10,
+                      padding: 10,
+                      border: '1px solid var(--pp-gray-300)',
+                      borderRadius: 'var(--pp-radius-md)',
+                      background: 'var(--pp-white)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="pp-strong" style={{ fontSize: 14 }}>
+                          {mapping.emoji ? `${mapping.emoji} ` : ''}{mapping.name}
+                        </div>
+                        <div className="pp-small" style={{ overflowWrap: 'anywhere' }}>
+                          {mapping.brand ? `${mapping.brand} · ` : ''}{mapping.category} · {mapping.barcode}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => startEditingBarcodeMemory(mapping.barcode)}
+                        aria-label={`Edit barcode memory for ${mapping.name}`}
+                        title={`Edit barcode memory for ${mapping.name}`}
+                        style={iconBtn}
+                      >
+                        <Pencil size={16} color="var(--pp-gray-600)" />
+                      </button>
+                      <button
+                        onClick={() => deleteBarcodeMemory(mapping.barcode, mapping.name)}
+                        aria-label={`Delete barcode memory for ${mapping.name}`}
+                        title={`Delete barcode memory for ${mapping.name}`}
+                        style={dangerIconBtn}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    {editingBarcode === mapping.barcode && (
+                      <div style={{ display: 'grid', gap: 8 }}>
+                        <input
+                          value={barcodeDraft.name}
+                          onChange={(event) => setBarcodeDraft((draft) => ({ ...draft, name: event.target.value }))}
+                          placeholder="Item name"
+                          style={textInput}
+                        />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                          <input
+                            value={barcodeDraft.brand}
+                            onChange={(event) => setBarcodeDraft((draft) => ({ ...draft, brand: event.target.value }))}
+                            placeholder="Brand"
+                            style={textInput}
+                          />
+                          <input
+                            value={barcodeDraft.category}
+                            onChange={(event) => setBarcodeDraft((draft) => ({ ...draft, category: event.target.value }))}
+                            placeholder="Category"
+                            style={textInput}
+                          />
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                          <input
+                            value={barcodeDraft.emoji}
+                            onChange={(event) => setBarcodeDraft((draft) => ({ ...draft, emoji: event.target.value }))}
+                            placeholder="Emoji"
+                            style={textInput}
+                          />
+                          <input
+                            type="number"
+                            min={1}
+                            value={barcodeDraft.suggestedExpiryDays}
+                            onChange={(event) => setBarcodeDraft((draft) => ({ ...draft, suggestedExpiryDays: event.target.value }))}
+                            placeholder="Expiry days"
+                            style={textInput}
+                          />
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button onClick={saveBarcodeMemoryEdit} style={primaryBtn}>
+                            <CheckCircle2 size={16} /> Save
+                          </button>
+                          <button onClick={() => setEditingBarcode(null)} style={secondaryBtn}>
+                            <X size={16} /> Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <button onClick={clearBarcodeMemory} style={{ ...secondaryBtn, color: 'var(--pp-tomato-red)', borderColor: 'var(--pp-tomato-red)' }}>
+                  <Trash2 size={16} /> Clear barcode memory
+                </button>
+              </div>
+            )}
+          </Card>
+
+          <Card style={{ padding: '14px 16px' }}>
             <div className="pp-strong" style={{ marginBottom: 4 }}>Export your data</div>
             <div className="pp-small" style={{ marginBottom: 12 }}>
               Download a backup of your pantry, groceries, and history
@@ -1194,6 +1380,20 @@ const iconBtn = {
   width: 32, height: 32, borderRadius: 'var(--pp-radius-full)',
   background: 'transparent', border: 'none', cursor: 'pointer',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
+} as const;
+
+const dangerIconBtn = {
+  width: 34,
+  height: 34,
+  borderRadius: 'var(--pp-radius-full)',
+  background: 'var(--pp-red-soft)',
+  color: 'var(--pp-red-text)',
+  border: 'none',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
 } as const;
 
 const textBtn = {

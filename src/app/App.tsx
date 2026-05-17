@@ -452,6 +452,7 @@ function AppInner() {
         notifsEnabled={notifsEnabled}
         profile={profile}
         reminderPrefs={reminderPrefs}
+        barcodeMappings={barcodeMappings}
         onImport={(data) => {
           setPantry(data.pantry);
           setGroceries(data.groceries);
@@ -477,6 +478,7 @@ function AppInner() {
         onToggleHaptics={setHaptics}
         onToggleNotifs={setNotifsEnabled}
         onUpdateReminderPrefs={setReminderPrefs}
+        onUpdateBarcodeMappings={setBarcodeMappings}
         householdJoinNotice={householdJoinNotice}
         onDismissHouseholdJoinNotice={() => setHouseholdJoinNotice(false)}
       />

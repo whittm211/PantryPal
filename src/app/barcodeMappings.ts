@@ -14,6 +14,17 @@ export type BarcodeMapping = {
 
 export type BarcodeMappings = Record<string, BarcodeMapping>;
 
+export type BarcodeMappingSummary = BarcodeMapping;
+
+export type BarcodeMappingUpdate = {
+  name: string;
+  brand?: string;
+  category: string;
+  emoji?: string;
+  suggestedExpiryDays: number;
+  imageUrl?: string;
+};
+
 export function foodItemToBarcodeMapping(barcode: string, item: FoodItem, now = Date.now()): BarcodeMapping {
   return {
     barcode,
@@ -48,6 +59,45 @@ export function normalizeBarcodeMappings(value: unknown): BarcodeMappings {
     if (normalized && key === normalized.barcode) acc[key] = normalized;
     return acc;
   }, {});
+}
+
+export function listBarcodeMappingSummaries(mappings: BarcodeMappings): BarcodeMappingSummary[] {
+  return Object.values(normalizeBarcodeMappings(mappings))
+    .sort((a, b) => b.updatedAt - a.updatedAt || a.name.localeCompare(b.name));
+}
+
+export function removeBarcodeMapping(mappings: BarcodeMappings, barcode: string): BarcodeMappings {
+  const next = { ...mappings };
+  delete next[barcode];
+  return next;
+}
+
+export function clearBarcodeMappings(_mappings: BarcodeMappings): BarcodeMappings {
+  return {};
+}
+
+export function updateBarcodeMapping(
+  mappings: BarcodeMappings,
+  barcode: string,
+  update: BarcodeMappingUpdate,
+  now = Date.now(),
+): BarcodeMappings {
+  const existing = mappings[barcode];
+  if (!existing) return mappings;
+
+  return {
+    ...mappings,
+    [barcode]: {
+      barcode,
+      name: update.name.trim(),
+      ...(update.brand?.trim() ? { brand: update.brand.trim() } : {}),
+      category: update.category.trim(),
+      ...(update.emoji?.trim() ? { emoji: update.emoji.trim() } : {}),
+      suggestedExpiryDays: positiveNumberOrDefault(update.suggestedExpiryDays, existing.suggestedExpiryDays),
+      ...(update.imageUrl?.trim() ? { imageUrl: update.imageUrl.trim() } : {}),
+      updatedAt: now,
+    },
+  };
 }
 
 function normalizeBarcodeMapping(value: unknown): BarcodeMapping | null {

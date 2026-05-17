@@ -2,9 +2,13 @@ import { describe, expect, it } from 'vitest';
 import type { FoodItem } from './data';
 import {
   barcodeMappingToLookup,
+  clearBarcodeMappings,
   foodItemToBarcodeMapping,
+  listBarcodeMappingSummaries,
   normalizeBarcodeMappings,
+  removeBarcodeMapping,
   type BarcodeMappings,
+  updateBarcodeMapping,
 } from './barcodeMappings';
 
 describe('barcode mappings', () => {
@@ -77,6 +81,108 @@ describe('barcode mappings', () => {
         category: 'Pantry',
         suggestedExpiryDays: 365,
         updatedAt: 1234,
+      },
+    });
+  });
+
+  it('lists saved mappings with the newest entry first', () => {
+    const mappings: BarcodeMappings = {
+      '111': {
+        barcode: '111',
+        name: 'Older Beans',
+        category: 'Pantry',
+        suggestedExpiryDays: 120,
+        updatedAt: 100,
+      },
+      '222': {
+        barcode: '222',
+        name: 'Newer Pasta',
+        brand: 'Kitchen Co',
+        category: 'Grains',
+        suggestedExpiryDays: 240,
+        updatedAt: 200,
+      },
+    };
+
+    expect(listBarcodeMappingSummaries(mappings)).toEqual([
+      {
+        barcode: '222',
+        name: 'Newer Pasta',
+        brand: 'Kitchen Co',
+        category: 'Grains',
+        suggestedExpiryDays: 240,
+        updatedAt: 200,
+      },
+      {
+        barcode: '111',
+        name: 'Older Beans',
+        category: 'Pantry',
+        suggestedExpiryDays: 120,
+        updatedAt: 100,
+      },
+    ]);
+  });
+
+  it('removes one barcode mapping without mutating the original map', () => {
+    const mappings: BarcodeMappings = {
+      '111': {
+        barcode: '111',
+        name: 'Beans',
+        category: 'Pantry',
+        suggestedExpiryDays: 120,
+        updatedAt: 100,
+      },
+      '222': {
+        barcode: '222',
+        name: 'Pasta',
+        category: 'Grains',
+        suggestedExpiryDays: 240,
+        updatedAt: 200,
+      },
+    };
+
+    expect(removeBarcodeMapping(mappings, '111')).toEqual({
+      '222': mappings['222'],
+    });
+    expect(mappings['111']?.name).toBe('Beans');
+  });
+
+  it('clears every saved barcode mapping', () => {
+    expect(clearBarcodeMappings({
+      '111': {
+        barcode: '111',
+        name: 'Beans',
+        category: 'Pantry',
+        suggestedExpiryDays: 120,
+        updatedAt: 100,
+      },
+    })).toEqual({});
+  });
+
+  it('updates one barcode mapping and refreshes its updated timestamp', () => {
+    const mappings: BarcodeMappings = {
+      '111': {
+        barcode: '111',
+        name: 'Beans',
+        category: 'Pantry',
+        suggestedExpiryDays: 120,
+        updatedAt: 100,
+      },
+    };
+
+    expect(updateBarcodeMapping(mappings, '111', {
+      name: 'Black Beans',
+      brand: 'Kitchen Co',
+      category: 'Canned',
+      suggestedExpiryDays: 365,
+    }, 500)).toEqual({
+      '111': {
+        barcode: '111',
+        name: 'Black Beans',
+        brand: 'Kitchen Co',
+        category: 'Canned',
+        suggestedExpiryDays: 365,
+        updatedAt: 500,
       },
     });
   });
