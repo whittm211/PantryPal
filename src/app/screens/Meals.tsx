@@ -4,6 +4,7 @@ import { FoodItem, Meal, DietTag, dietLabels, mealTypeMeta } from '../data';
 import { rankMeals } from '../mealMatch';
 import { Clock, Flame, Heart, CalendarPlus, Plus } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { getMealPhoto } from '../mealPhotos';
 
 type Chip = 'all' | 'quick' | 'family' | 'lowcost' | 'expiring' | 'favorites';
 
@@ -157,6 +158,7 @@ export function Meals({
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 10 }}>
               {group.map(({ meal, haveCount, missingCount, usesExpiring, expiringNames }) => {
                 const isFav = favorites.includes(meal.id);
+                const photo = getMealPhoto(meal);
                 return (
                   <Card key={meal.id} style={{ padding: 0, overflow: 'hidden' }}>
                     <div
@@ -168,10 +170,10 @@ export function Meals({
                         fontSize: 52, position: 'relative', overflow: 'hidden',
                       }}
                     >
-                      {meal.image ? (
+                      {photo ? (
                         <ImageWithFallback
-                          src={meal.image}
-                          alt={meal.name}
+                          src={photo.url}
+                          alt={photo.alt}
                           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       ) : (

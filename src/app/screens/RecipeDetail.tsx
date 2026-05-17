@@ -4,6 +4,7 @@ import { Meal, quickSwapMap, missingIngredientsMap } from '../data';
 import { Clock, Users, ChefHat, Flame, Check, ShoppingCart, Minus, Plus, Heart, CalendarPlus, RefreshCcw } from 'lucide-react';
 import { dietLabels } from '../data';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { getMealPhoto } from '../mealPhotos';
 
 export function RecipeDetail({
   meal,
@@ -24,6 +25,7 @@ export function RecipeDetail({
 }) {
   const [servings, setServings] = useState(meal.servings);
   const scaleFactor = servings / meal.servings;
+  const photo = getMealPhoto(meal);
 
   function scaleAmount(amount: string): string {
     const num = parseFloat(amount);
@@ -47,10 +49,10 @@ export function RecipeDetail({
           overflow: 'hidden',
         }}
       >
-        {meal.image ? (
+        {photo ? (
           <ImageWithFallback
-            src={meal.image}
-            alt={meal.name}
+            src={photo.url}
+            alt={photo.alt}
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (

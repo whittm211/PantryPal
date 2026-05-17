@@ -520,7 +520,6 @@ CATEGORIES.forEach((cat) => {
       dietTags: r.diet,
       protein, carbs, fat,
       mealType: r.type,
-      image: cat.image,
     };
     curatedMeals.push(meal);
   });

@@ -2,6 +2,7 @@ import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { isSupabaseConfigured, supabase } from './supabase';
 import type { AIRequest, AISuggestion } from '../app/ai';
 import { pickNovelImage } from '../app/ai';
+import { getMealPhoto } from '../app/mealPhotos';
 
 const FN_URL = `https://${projectId}.supabase.co/functions/v1/make-server-e808db2a/ai-chef`;
 
@@ -38,6 +39,7 @@ export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion
 
   return raw.map((s: Partial<AISuggestion>, i: number) => {
     const matched = s.mealId ? mealById.get(s.mealId) : undefined;
+    const matchedPhoto = matched ? getMealPhoto(matched) : null;
     return {
       id: `ai-${Date.now()}-${i}`,
       mealId: s.mealId ?? undefined,
@@ -50,7 +52,7 @@ export async function getAIRecommendations(req: AIRequest): Promise<AISuggestion
       usesIngredients: Array.isArray(s.usesIngredients) ? s.usesIngredients : [],
       missingIngredients: Array.isArray(s.missingIngredients) ? s.missingIngredients : [],
       matchScore: Math.min(99, Math.max(40, Math.round(Number(s.matchScore ?? 70)))),
-      image: matched?.image ?? pickNovelImage(req.goal),
+      image: matched ? matchedPhoto?.url : pickNovelImage(req.goal),
     };
   });
 }

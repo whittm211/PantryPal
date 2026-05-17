@@ -1,4 +1,5 @@
 import { FoodItem, Meal, DietPreferences, CookHistoryEntry, dietLabels } from './data';
+import { getMealPhoto } from './mealPhotos';
 
 export interface AISuggestion {
   id: string;
@@ -119,7 +120,7 @@ export async function generateMealRecommendations(req: AIRequest): Promise<AISug
       .filter(Boolean) as string[],
     missingIngredients: s.meal.missingIds,
     matchScore: Math.min(99, Math.max(40, Math.round(60 + s.score * 4))),
-    image: s.meal.image,
+    image: getMealPhoto(s.meal)?.url,
   }));
 
   // Improvised novel idea if we have ≥3 pantry items with names
