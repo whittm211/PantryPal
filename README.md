@@ -64,6 +64,12 @@ Run TypeScript checks:
 npm run typecheck
 ```
 
+Run the public app smoke check:
+
+```powershell
+npm run smoke:prod
+```
+
 Build production assets:
 
 ```powershell
@@ -81,6 +87,7 @@ Before deploying a web MVP:
 - Run `npm test`.
 - Run `npm run typecheck`.
 - Run `npm run build`.
+- Run `npm run smoke:prod` after the public deploy finishes.
 - Test the guest flow in the browser.
 - Test account creation and login if Supabase auth is enabled.
 - Confirm Supabase Edge Functions are deployed if backend code changed.

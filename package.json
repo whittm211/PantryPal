@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "smoke:prod": "node scripts/smokeProduction.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
