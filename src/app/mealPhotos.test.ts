@@ -44,4 +44,18 @@ describe('getMealPhoto', () => {
       seededPhotoMeals.map((meal) => [meal.id, meal.name]),
     );
   });
+
+  it('approves exact recipe database photos for generated cookbook matches', () => {
+    const matchedMeals: Meal[] = [
+      { ...baseMeal, id: 'cm-thai-pad-thai', name: 'Pad Thai' },
+      { ...baseMeal, id: 'cm-mediterranean-shakshuka', name: 'Shakshuka' },
+      { ...baseMeal, id: 'cm-french-ratatouille', name: 'Ratatouille' },
+    ];
+
+    expect(matchedMeals.map((meal) => getMealPhoto(meal))).toEqual([
+      expect.objectContaining({ alt: 'Pad Thai', source: 'TheMealDB', match: 'exact' }),
+      expect.objectContaining({ alt: 'Shakshuka', source: 'TheMealDB', match: 'exact' }),
+      expect.objectContaining({ alt: 'Ratatouille', source: 'TheMealDB', match: 'exact' }),
+    ]);
+  });
 });
