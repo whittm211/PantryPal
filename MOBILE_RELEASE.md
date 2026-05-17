@@ -81,6 +81,8 @@ cd android
 6. Configure StoreKit subscriptions before enabling paid iOS subscriptions.
 7. Upload to TestFlight before App Store review.
 
+The manual `Mobile iOS Build` workflow runs on a macOS GitHub runner. It builds the Capacitor iOS project as a simulator build with code signing disabled. This validates the Xcode project, but it does not create a signed App Store build.
+
 ## Payments
 
 - iOS: Apple StoreKit / In-App Purchase.
