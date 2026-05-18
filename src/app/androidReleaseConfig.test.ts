@@ -20,6 +20,8 @@ describe('android release signing config', () => {
     expect(workflow).toContain('base64.b64decode');
     expect(workflow).toContain('ANDROID_KEYSTORE_BASE64 characters');
     expect(workflow).toContain('Decoded keystore bytes');
+    expect(workflow).toContain('ANDROID_KEYSTORE_PATH: upload-keystore.jks');
+    expect(workflow).not.toContain('ANDROID_KEYSTORE_PATH: app/upload-keystore.jks');
     expect(workflow).toContain('bundleRelease');
     expect(workflow).toContain('PantryPal-release-aab');
   });
