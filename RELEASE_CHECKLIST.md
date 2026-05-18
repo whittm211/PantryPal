@@ -27,6 +27,7 @@ Last updated: 2026-05-17
 - [x] Public marketing page is available at `/marketing.html` for App Store Connect.
 - [x] Google Play listing, Data safety, internal testing, and subscription prep worksheet exists in [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md).
 - [x] Android signing and upload keystore workflow is documented in [ANDROID_SIGNING.md](./ANDROID_SIGNING.md).
+- [x] Manual `Mobile Android Release Bundle` workflow creates a signed `PantryPal-release-aab` artifact for Google Play.
 
 ## Verification Commands
 
@@ -72,8 +73,8 @@ Check:
 - Consider packaged mobile distribution if PantryPal needs app store presence.
 - Complete the Apple Developer membership activation, then follow [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md) for TestFlight.
 - Capture the App Store screenshot set from [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md).
-- Create the Google Play Console app, then follow [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md) for Android internal testing.
-- Generate the Android upload keystore and add signing secrets using [ANDROID_SIGNING.md](./ANDROID_SIGNING.md).
+- Upload the latest signed `PantryPal-release-aab` artifact to a Google Play internal testing release.
+- Complete Google Play store listing assets, Data safety, app content, pricing/distribution, and tester setup using [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md).
 
 ## Admin Cleanup
 

@@ -80,6 +80,31 @@ Use Google Play internal testing before production.
 
 Internal testing is the fastest Play Console testing lane and is the right first Android distribution step.
 
+Current signed artifact workflow:
+
+- Workflow: `Mobile Android Release Bundle`
+- Artifact name: `PantryPal-release-aab`
+- App bundle file inside artifact: `app-release.aab`
+- First verified successful run: `26007003263`
+- Successful artifact created from commit: `be1eab218672612a838f77d4a5c8710cec446eca`
+
+Download a fresh artifact from the latest successful release workflow before each Google Play upload. GitHub Actions artifacts expire, so do not treat the downloaded `.zip` as the long-term source of truth. The long-term source of truth is the repo plus the backed-up private upload keystore.
+
+## Play Console Upload Steps
+
+1. Open Google Play Console.
+2. Select the PantryPal app.
+3. Go to `Testing` > `Internal testing`.
+4. Create a new release.
+5. Upload the `app-release.aab` from the `PantryPal-release-aab` artifact.
+6. Add release notes, for example: `Initial PantryPal Android internal test build.`
+7. Review and roll out to internal testing.
+8. Add tester email addresses or a Google Group under the internal testing testers tab.
+9. Open the opt-in link on an Android device and install PantryPal from Google Play.
+10. Test sign-up, guest mode, pantry, AI Chef, grocery list, barcode camera permission, and Plans.
+
+If Play Console rejects the upload, check the exact message first. Common first-upload blockers are a missing app content declaration, an incomplete Data safety form, or trying to upload a bundle signed with a different upload key than the app record expects.
+
 ## Google Play Billing
 
 Use Google Play Billing for Android premium digital features. Do not send Android users to Stripe for PantryPal Plus inside the Android app.
@@ -106,7 +131,7 @@ Before enabling paid Android subscriptions:
 - [ ] Complete Data safety form.
 - [ ] Complete app content declarations.
 - [ ] Configure Android signing secrets in GitHub using [ANDROID_SIGNING.md](./ANDROID_SIGNING.md).
-- [ ] Run `Mobile Android Release Bundle`.
+- [x] Run `Mobile Android Release Bundle`.
 - [ ] Upload `.aab` to internal testing.
 - [ ] Test Android install and core app flows.
 - [ ] Configure Google Play Billing before enabling PantryPal Plus on Android.
