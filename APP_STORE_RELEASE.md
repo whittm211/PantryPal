@@ -1,8 +1,8 @@
 # PantryPal App Store Release Prep
 
-Last updated: 2026-05-17
+Last updated: 2026-05-29
 
-Use this worksheet while the Apple Developer Program status is **Membership pending**. The signed archive and TestFlight upload wait until Apple activates the account, but the listing, privacy answers, screenshots, and subscription copy can be prepared now.
+Use this worksheet now that the Apple Developer Program is active. The next milestone is creating the App Store Connect app record, generating signing assets, adding GitHub Actions secrets, and sending the first PantryPal build to TestFlight.
 
 ## App Identity
 
@@ -70,8 +70,51 @@ Use the same plan names and benefits in PantryPal, App Store Connect, and Google
 
 Do not send iOS users to Stripe for premium digital features. Use Apple In-App Purchase for iOS subscriptions.
 
-## Pre-Activation Tasks
+## App Store Connect Setup
 
+1. Open [Apple Developer Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/).
+2. Create an explicit App ID for `com.whittm211.pantrypal`.
+3. Enable capabilities only when PantryPal actually uses them. Camera access for barcode scanning does not require a special App ID capability.
+4. Open [App Store Connect](https://appstoreconnect.apple.com/).
+5. Create a new app using:
+   - Name: `PantryPal`
+   - Bundle ID: `com.whittm211.pantrypal`
+   - SKU: `pantrypal-ios`
+   - Primary category: `Food & Drink`
+6. Add Support, Privacy Policy, Terms, and Marketing URLs from this document.
+7. Fill in app privacy answers using the Privacy Answers section below.
+
+## iOS Signing Assets
+
+Create these files outside the repo and keep backups somewhere private:
+
+- Apple Distribution certificate exported as `.p12`
+- App Store provisioning profile for `com.whittm211.pantrypal`
+- `ExportOptions.plist` for App Store distribution
+
+Add these GitHub Actions secrets after base64-encoding the files:
+
+- `IOS_CERTIFICATE_BASE64`
+- `IOS_CERTIFICATE_PASSWORD`
+- `IOS_PROVISION_PROFILE_BASE64`
+- `IOS_EXPORT_OPTIONS_PLIST_BASE64`
+- `IOS_KEYCHAIN_PASSWORD`
+
+Do not commit certificates, provisioning profiles, `.p12` files, or export option files.
+
+On a Mac, base64-copy the files like this:
+
+```bash
+base64 -i ios_distribution.p12 | pbcopy
+base64 -i PantryPal.mobileprovision | pbcopy
+base64 -i ExportOptions.plist | pbcopy
+```
+
+## Active Developer Checklist
+
+- [ ] Accept any required Apple agreements in App Store Connect.
+- [ ] Create App ID for `com.whittm211.pantrypal`.
+- [ ] Create the App Store Connect app record.
 - [ ] Prepare app listing text.
 - [x] Prepare Support URL.
 - [x] Confirm Privacy Policy URL is publicly reachable.
@@ -79,15 +122,14 @@ Do not send iOS users to Stripe for premium digital features. Use Apple In-App P
 - [x] Prepare Marketing URL.
 - [ ] Capture screenshot set from the live or local app.
 - [ ] Draft subscription group and product names.
+- [ ] Create Apple Distribution certificate.
+- [ ] Create App Store provisioning profile.
+- [ ] Create `ExportOptions.plist`.
+- [ ] Add iOS signing secrets to GitHub Actions.
 - [ ] Keep Apple signing files out of git.
 
-## After Membership Is Active
+## TestFlight Release
 
-- [ ] Accept any required Apple agreements in App Store Connect.
-- [ ] Create the App ID for `com.whittm211.pantrypal`.
-- [ ] Create the App Store Connect app record.
-- [ ] Create Apple Distribution certificate and App Store provisioning profile.
-- [ ] Add iOS signing secrets to GitHub Actions.
 - [ ] Run `Mobile iOS Build`.
 - [ ] Run `Mobile iOS Release Archive`.
 - [ ] Upload the `.ipa` to App Store Connect.

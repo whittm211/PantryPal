@@ -1,6 +1,6 @@
 # PantryPal Release Checklist
 
-Last updated: 2026-05-17
+Last updated: 2026-05-29
 
 ## V1 Launch Readiness
 
@@ -71,7 +71,8 @@ Check:
 - Add a dedicated support/contact page or support email.
 - Add admin cleanup tools for test accounts and test data.
 - Consider packaged mobile distribution if PantryPal needs app store presence.
-- Complete the Apple Developer membership activation, then follow [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md) for TestFlight.
+- Create the App Store Connect app record and iOS signing assets using [APP_STORE_RELEASE.md](./APP_STORE_RELEASE.md).
+- Add iOS signing secrets to GitHub Actions, then run `Mobile iOS Build` and `Mobile iOS Release Archive`.
 - Capture the App Store screenshot set from [APP_STORE_SCREENSHOTS.md](./APP_STORE_SCREENSHOTS.md).
 - Upload the latest signed `PantryPal-release-aab` artifact to a Google Play internal testing release.
 - Complete Google Play store listing assets, Data safety, app content, pricing/distribution, and tester setup using [GOOGLE_PLAY_RELEASE.md](./GOOGLE_PLAY_RELEASE.md).
