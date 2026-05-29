@@ -21,3 +21,10 @@ supabase/.temp/
 .android-release/
 *.jks
 *.keystore
+
+# Local iOS signing files. Never commit certificates, private keys, profiles, or encoded secrets.
+.ios-release/
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
