@@ -26,5 +26,8 @@ supabase/.temp/
 .ios-release/
 *.p12
 *.cer
+*.csr
+*.key
+*.pem
 *.certSigningRequest
 *.mobileprovision
