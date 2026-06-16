@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { PhoneFrame } from './components/PhoneFrame';
-import { StatusBar } from './components/StatusBar';
 import { TopBar } from './components/TopBar';
 import { BottomNav, Tab } from './components/BottomNav';
 import { useAppActions } from './hooks/useAppActions';
@@ -582,7 +581,6 @@ function AppInner() {
           },
         }}
       />
-      <StatusBar />
       <Suspense fallback={<RouteFallback />}>
         {chrome ? (
           <>
