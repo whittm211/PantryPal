@@ -1,11 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
-import { BrowserMultiFormatReader } from '@zxing/browser';
+import { BarcodeFormat, BrowserMultiFormatReader } from '@zxing/browser';
+import { DecodeHintType } from '@zxing/library';
 import { X, Camera, Loader2, Keyboard } from 'lucide-react';
 import { Button } from './ui';
 import { lookupBarcode, BarcodeLookup } from '../../lib/barcode';
 import { toast } from 'sonner';
 
 type ScannerControls = { stop: () => void };
+type NativeBarcodeDetector = {
+  detect: (source: HTMLVideoElement) => Promise<Array<{ rawValue?: string }>>;
+};
+type NativeBarcodeDetectorConstructor = new (options?: { formats?: string[] }) => NativeBarcodeDetector;
+
+declare global {
+  interface Window {
+    BarcodeDetector?: NativeBarcodeDetectorConstructor;
+  }
+}
+
+const groceryBarcodeFormats = [
+  BarcodeFormat.UPC_A,
+  BarcodeFormat.UPC_E,
+  BarcodeFormat.EAN_13,
+  BarcodeFormat.EAN_8,
+  BarcodeFormat.CODE_128,
+  BarcodeFormat.CODE_39,
+  BarcodeFormat.ITF,
+];
+
+const nativeBarcodeFormats = ['upc_a', 'upc_e', 'ean_13', 'ean_8', 'code_128', 'code_39', 'itf'];
 
 export function BarcodeScanner({
   open,
@@ -20,14 +43,17 @@ export function BarcodeScanner({
   const readerRef = useRef<BrowserMultiFormatReader | null>(null);
   const controlsRef = useRef<ScannerControls | null>(null);
   const cancelledRef = useRef(false);
+  const lookupInFlightRef = useRef(false);
   const [status, setStatus] = useState<'idle' | 'starting' | 'scanning' | 'looking-up' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [manualCode, setManualCode] = useState('');
+  const [scanHint, setScanHint] = useState('Hold the barcode inside the frame.');
 
   async function submitCode(code: string) {
     const clean = code.trim();
-    if (!clean || cancelledRef.current) return;
+    if (!clean || cancelledRef.current || lookupInFlightRef.current) return;
 
+    lookupInFlightRef.current = true;
     controlsRef.current?.stop();
     setStatus('looking-up');
 
@@ -42,6 +68,8 @@ export function BarcodeScanner({
       if (cancelledRef.current) return;
       toast.error(err?.message ?? 'Lookup failed');
       onResult({ found: false, barcode: clean });
+    } finally {
+      lookupInFlightRef.current = false;
     }
   }
 
@@ -52,18 +80,89 @@ export function BarcodeScanner({
     setStatus('starting');
     setErrorMsg('');
     setManualCode('');
-
-    const reader = new BrowserMultiFormatReader();
-    readerRef.current = reader;
+    setScanHint('Hold the barcode inside the frame.');
+    lookupInFlightRef.current = false;
 
     const constraints: MediaStreamConstraints = {
       video: {
         facingMode: { ideal: 'environment' },
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
       },
       audio: false,
     };
+
+    let hintTimer = window.setTimeout(() => {
+      if (!cancelledRef.current) {
+        setScanHint('Still scanning. Move closer, keep the barcode flat, or type the number below.');
+      }
+    }, 8000);
+
+    startNativeBarcodeDetection(constraints).then((started) => {
+      if (cancelledRef.current || started) return;
+      startZxingBarcodeDetection(constraints);
+    });
+
+    return () => {
+      cancelledRef.current = true;
+      window.clearTimeout(hintTimer);
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+      readerRef.current = null;
+    };
+  }, [open]);
+
+  async function startNativeBarcodeDetection(constraints: MediaStreamConstraints) {
+    const BarcodeDetector = window.BarcodeDetector;
+    if (!BarcodeDetector || !videoRef.current || !navigator.mediaDevices?.getUserMedia) return false;
+
+    let stream: MediaStream | undefined;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      if (cancelledRef.current || !videoRef.current) {
+        stream.getTracks().forEach((track) => track.stop());
+        return true;
+      }
+
+      videoRef.current.srcObject = stream;
+      await videoRef.current.play();
+      setStatus('scanning');
+
+      const detector = new BarcodeDetector({ formats: nativeBarcodeFormats });
+      const interval = window.setInterval(() => {
+        const video = videoRef.current;
+        if (!video || cancelledRef.current || lookupInFlightRef.current || video.readyState < 2) return;
+
+        void detector.detect(video).then((codes) => {
+          const code = codes.find((item) => item.rawValue?.trim())?.rawValue;
+          if (code) void submitCode(code);
+        }).catch(() => {
+          // A bad frame should not stop scanning; the next frame may decode cleanly.
+        });
+      }, 250);
+
+      controlsRef.current = {
+        stop: () => {
+          window.clearInterval(interval);
+          stream.getTracks().forEach((track) => track.stop());
+          if (videoRef.current) videoRef.current.srcObject = null;
+        },
+      };
+
+      return true;
+    } catch {
+      stream?.getTracks().forEach((track) => track.stop());
+      return false;
+    }
+  }
+
+  function startZxingBarcodeDetection(constraints: MediaStreamConstraints) {
+    const hints = new Map();
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, groceryBarcodeFormats);
+    hints.set(DecodeHintType.TRY_HARDER, true);
+
+    const reader = new BrowserMultiFormatReader(hints);
+    readerRef.current = reader;
 
     reader
       .decodeFromConstraints(constraints, videoRef.current!, async (result, _err, controls) => {
@@ -83,14 +182,7 @@ export function BarcodeScanner({
         setStatus('error');
         setErrorMsg(err?.message ?? 'Could not access camera');
       });
-
-    return () => {
-      cancelledRef.current = true;
-      controlsRef.current?.stop();
-      controlsRef.current = null;
-      readerRef.current = null;
-    };
-  }, [open]);
+  }
 
   if (!open) return null;
 
@@ -209,7 +301,7 @@ export function BarcodeScanner({
         }}
       >
         <div className="pp-small" style={{ color: 'var(--pp-overlay-white-85)' }}>
-          Hold the barcode inside the frame.
+          {scanHint}
         </div>
         <form
           onSubmit={(e) => {

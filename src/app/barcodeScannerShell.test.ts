@@ -19,4 +19,12 @@ describe('barcode scanner mobile shell', () => {
     expect(source).toContain('Enter barcode manually');
     expect(source).toContain('Use manual barcode');
   });
+
+  it('uses native barcode detection when the device browser supports it', () => {
+    const source = readFileSync('src/app/components/BarcodeScanner.tsx', 'utf8');
+
+    expect(source).toContain('BarcodeDetector');
+    expect(source).toContain('startNativeBarcodeDetection');
+    expect(source).toContain('startZxingBarcodeDetection');
+  });
 });
