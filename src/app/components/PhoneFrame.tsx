@@ -4,7 +4,7 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        height: '100vh',
         width: '100vw',
         background: 'var(--pp-warm-cream)',
         display: 'flex',
@@ -15,10 +15,11 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
       <div
         style={{
           width: '100%',
-          minHeight: '100vh',
+          height: '100%',
           background: 'var(--pp-white)',
           display: 'flex',
           flexDirection: 'column',
+          minHeight: 0,
           paddingTop: 'env(safe-area-inset-top)',
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}

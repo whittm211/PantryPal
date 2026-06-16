@@ -590,7 +590,17 @@ function AppInner() {
               onBack={() => setRoute(backTo)}
               onProfile={() => go({ name: 'settings' })}
             />
-            {inner}
+            <main
+              style={{
+                flex: 1,
+                minHeight: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+            >
+              {inner}
+            </main>
             <BottomNav
               active={activeTabForRoute(route)}
               onChange={goTab}
