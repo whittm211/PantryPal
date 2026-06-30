@@ -22,6 +22,6 @@ describe('app store readiness worksheet', () => {
     expect(docs).toContain('Auto-renewable subscription');
     expect(docs).toContain('PantryPal Plus');
     expect(docs).toContain('Restore purchases');
-    expect(docs).toContain('Membership pending');
+    expect(docs).toContain('Apple Developer Program is active');
   });
 });

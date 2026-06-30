@@ -43,7 +43,7 @@ describe('lookupBarcode', () => {
       name: 'Honey Nut Cereal',
       brand: 'Pantry Co',
       category: 'Grains',
-      emoji: 'BOX',
+      emoji: '🌾',
       suggestedExpiryDays: 180,
       imageUrl: 'https://example.com/cereal.jpg',
     });

@@ -110,11 +110,11 @@ function expiryDaysForCategory(category: string): number {
 }
 
 function emojiForCategory(category: string): string {
-  if (category === 'Produce') return 'APPLE';
-  if (category === 'Dairy') return 'MILK';
-  if (category === 'Protein') return 'MEAT';
-  if (category === 'Frozen') return 'ICE';
-  if (category === 'Grains') return 'BOX';
-  if (category === 'Snacks') return 'CHIPS';
-  return 'FOOD';
+  if (category === 'Produce') return '🍎';
+  if (category === 'Dairy') return '🥛';
+  if (category === 'Protein') return '🥩';
+  if (category === 'Frozen') return '🧊';
+  if (category === 'Grains') return '🌾';
+  if (category === 'Snacks') return '🍪';
+  return '🛒';
 }
