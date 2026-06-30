@@ -31,9 +31,9 @@ npm run build
 - [x] Settings opens from the profile button.
 - [x] Settings shows local guest mode status.
 - [x] Settings shows JSON/CSV export controls.
-- [ ] Verify JSON export downloads a backup file in Chrome, Edge, or Firefox.
-- [ ] Verify CSV export downloads a backup file in Chrome, Edge, or Firefox.
-- [ ] Verify importing a JSON backup restores pantry, grocery, recipe, and settings data.
+- [x] Verify JSON export downloads a backup file in Chrome, Edge, or Firefox.
+- [x] Verify CSV export downloads a backup file in Chrome, Edge, or Firefox.
+- [x] Verify importing a JSON backup restores pantry, grocery, recipe, and settings data.
 
 ## Notes From Codex In-App Browser QA
 
